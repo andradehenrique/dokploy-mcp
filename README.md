@@ -80,29 +80,22 @@ If you are using an MCP-enabled extension within VS Code (such as the official C
 2.  Add or update the `mcp.servers` configuration:
 
 ```json
-// Example settings.json configuration for VS Code
 {
-    // ... other settings ...
     "mcp": {
         "servers": {
-            "dokploy-mcp": { // A unique name for this MCP server entry
+            "dokploy-mcp": {
                 "type": "stdio",
-                "command": "node", // Or your runtime executable
+                "command": "node",
                 "args": [
-                    // Replace with the absolute path to your built Dokploy MCP main file
                     "/path/to/your/dokploy-mcp/build/index.js" 
                 ],
                 "env": {
-                    // Environment variables required by your Dokploy MCP
                     "DOKPLOY_API_URL": "http://your-dokploy-server-url.com/api",
                     "DOKPLOY_API_TOKEN": "<your-dokploy-api-token>" 
-                    // Add any other environment variables your MCP needs
                 }
             }
-            // ... you can add other MCP server configurations here ...
         }
     }
-    // ... other settings ...
 }
 ```
 
