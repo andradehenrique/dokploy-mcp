@@ -18,16 +18,31 @@ Dokploy MCP Server exposes Dokploy functionalities as tools consumable via the M
 
 ## Available Tools
 
-This MCP server currently provides the following tools:
+This MCP server currently provides the following tools for comprehensive project management:
 
 *   **`project-all`**:
     *   Description: Lists all projects in Dokploy.
     *   Input Schema: None.
+
 *   **`project-one`**:
     *   Description: Gets a specific project by its ID in Dokploy.
     *   Input Schema: `{ "projectId": "string" }` (The ID of the project to retrieve).
 
-*(More tools will be added as the project develops.)*
+*   **`project-create`**:
+    *   Description: Creates a new project in Dokploy.
+    *   Input Schema: `{ "name": "string", "description": "string|null", "env": "string" }` (name is required, description and env are optional).
+
+*   **`project-update`**:
+    *   Description: Updates an existing project in Dokploy.
+    *   Input Schema: `{ "projectId": "string", "name": "string", "description": "string|null", "createdAt": "string", "organizationId": "string", "env": "string" }` (projectId is required, all other fields are optional).
+
+*   **`project-duplicate`**:
+    *   Description: Duplicates an existing project in Dokploy with optional service selection.
+    *   Input Schema: `{ "sourceProjectId": "string", "name": "string", "description": "string", "includeServices": "boolean", "selectedServices": "array" }` (sourceProjectId and name are required, supports selective service duplication).
+
+*   **`project-remove`**:
+    *   Description: Removes/deletes an existing project in Dokploy.
+    *   Input Schema: `{ "projectId": "string" }` (The ID of the project to remove).
 
 ## Architecture
 
@@ -37,6 +52,7 @@ The Dokploy MCP Server is built using:
 *   **Node.js & TypeScript**: As the underlying runtime and language.
 *   **Stdio Transport**: By default, it communicates with MCP clients over standard input/output (stdio), as configured in `src/index.ts`.
 *   **Dokploy API Interaction**: It interacts with your Dokploy server's API to perform actions based on tool invocations.
+*   **HTTP Client Abstraction**: Uses a centralized HTTP client for consistent API communication and error handling.
 
 The server listens for MCP requests, executes the corresponding tool (e.g., fetching project data from Dokploy), and returns the results in MCP format.
 
