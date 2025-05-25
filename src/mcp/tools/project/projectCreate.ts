@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { defineTool } from "../../toolTypes.js";
+import { defineTool } from "../toolTypes.js";
 import { createHttpClient } from "../../../utils/httpClient.js";
 
 export const projectCreate = defineTool({

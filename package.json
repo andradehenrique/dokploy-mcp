@@ -1,19 +1,32 @@
 {
-  "name": "dokploy-mcp",
+  "name": "@ahdev/dokploy-mcp",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "MCP Server for Dokploy API",
+  "main": "build/index.js",
+  "bin": {
+    "dokploy-mcp": "./build/index.js"
+  },
+  "files": ["build"],
   "scripts": {
     "build": "tsc && chmod 755 build/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "type": "module",
-  "bin": {
-    "dokploy-mcp": "./build/index.js"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andradehenrique/dokploy-mcp.git"
   },
+  "keywords": [
+    "modelcontextprotocol",
+    "mcp",
+    "dokploy"
+  ],
+  "author": "Henrique Andrade <developer@henriqueandrade.dev>",
+  "bugs": {
+    "url": "https://github.com/andradehenrique/dokploy-mcp/issues"
+  },
+  "homepage": "https://github.com/andradehenrique/dokploy-mcp#readme",
+  "license": "MIT",
+  "type": "module",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.0",
     "zod": "^3.25.28"
