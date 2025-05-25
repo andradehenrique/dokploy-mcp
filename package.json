@@ -1,12 +1,14 @@
 {
   "name": "@ahdev/dokploy-mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MCP Server for Dokploy API",
   "main": "build/index.js",
   "bin": {
-    "dokploy-mcp": "./build/index.js"
+    "dokploy-mcp": "build/index.js"
   },
-  "files": ["build"],
+  "files": [
+    "build"
+  ],
   "scripts": {
     "build": "tsc && chmod 755 build/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
