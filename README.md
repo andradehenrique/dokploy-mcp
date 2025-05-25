@@ -18,7 +18,7 @@ Dokploy MCP Server exposes Dokploy functionalities as tools consumable via the M
 
 ## Available Tools
 
-This MCP server currently provides the following tools for comprehensive project management:
+This MCP server currently provides the following tools for comprehensive project and application management:
 
 *   **`project-all`**:
     *   Description: Lists all projects in Dokploy.
@@ -43,6 +43,10 @@ This MCP server currently provides the following tools for comprehensive project
 *   **`project-remove`**:
     *   Description: Removes/deletes an existing project in Dokploy.
     *   Input Schema: `{ "projectId": "string" }` (The ID of the project to remove).
+
+*   **`application-one`**:
+    *   Description: Gets a specific application by its ID in Dokploy.
+    *   Input Schema: `{ "applicationId": "string" }` (The ID of the application to retrieve).
 
 ## Architecture
 

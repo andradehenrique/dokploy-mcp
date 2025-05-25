@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { defineTool } from "../toolTypes.js";
-import { createHttpClient } from "../../utils/httpClient.js";
+import { defineTool } from "../../toolTypes.js";
+import { createHttpClient } from "../../../utils/httpClient.js";
 
 const serviceSchema = z.object({
   id: z.string().describe("The ID of the service."),
