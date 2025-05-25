@@ -1,22 +1,296 @@
 # Dokploy MCP Server
 
+[![npm version](https://img.shields.io/npm/v/@ahdev/dokploy-mcp.svg)](https://www.npmjs.com/package/@ahdev/dokploy-mcp) [<img alt="Install in VS Code (npx)" src="https://img.shields.io/badge/VS_Code-VS_Code?style=flat-square&label=Install%20Dokploy%20MCP&color=0098FF">](https://insiders.vscode.dev/redirect?url=vscode%3Amcp%2Finstall%3F%7B%22name%22%3A%22dokploy-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40ahdev%2Fdokploy-mcp%40latest%22%5D%7D)
+
 Dokploy MCP Server exposes Dokploy functionalities as tools consumable via the Model Context Protocol (MCP). It allows MCP-compatible clients (e.g., AI models, other applications) to interact with your Dokploy server programmatically.
 
-## Table of Contents
+## 🛠️ Getting Started
 
-- [Dokploy MCP Server](#dokploy-mcp-server)
-  - [Table of Contents](#table-of-contents)
-  - [Available Tools](#available-tools)
-  - [Architecture](#architecture)
-  - [Installation](#installation)
-  - [Usage](#usage)
-    - [1. Configuring with VS Code (for MCP-enabled extensions like Claude Code)](#1-configuring-with-vs-code-for-mcp-enabled-extensions-like-claude-code)
-    - [2. Configuring for Claude Code (General Setup)](#2-configuring-for-claude-code-general-setup)
-  - [Contributing](#contributing)
-  - [Support](#support)
-  - [License](#license)
+### Requirements
 
-## Available Tools
+- Node.js >= v18.0.0 (or Docker)
+- Cursor, VS Code, Claude Desktop, or another MCP Client
+- A running Dokploy server instance
+
+### Install in Cursor
+
+Go to: `Settings` -> `Cursor Settings` -> `MCP` -> `Add new global MCP server`
+
+Add this to your Cursor `~/.cursor/mcp.json` file. You may also install in a specific project by creating `.cursor/mcp.json` in your project folder. See [Cursor MCP docs](https://docs.cursor.com/context/model-context-protocol) for more info.
+
+```json
+{
+  "mcpServers": {
+    "dokploy-mcp": {
+      "command": "npx",
+      "args": ["-y", "@ahdev/dokploy-mcp"],
+      "env": {
+        "DOKPLOY_URL": "https://your-dokploy-server.com/api",
+        "DOKPLOY_AUTH_TOKEN": "your-dokploy-api-token"
+      }
+    }
+  }
+}
+```
+
+<details>
+<summary>Alternative: Use Bun</summary>
+
+```json
+{
+  "mcpServers": {
+    "dokploy-mcp": {
+      "command": "bunx",
+      "args": ["-y", "@ahdev/dokploy-mcp"],
+      "env": {
+        "DOKPLOY_URL": "https://your-dokploy-server.com/api",
+        "DOKPLOY_AUTH_TOKEN": "your-dokploy-api-token"
+      }
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary>Alternative: Use Deno</summary>
+
+```json
+{
+  "mcpServers": {
+    "dokploy-mcp": {
+      "command": "deno",
+      "args": ["run", "--allow-env", "--allow-net", "npm:@ahdev/dokploy-mcp"],
+      "env": {
+        "DOKPLOY_URL": "https://your-dokploy-server.com/api",
+        "DOKPLOY_AUTH_TOKEN": "your-dokploy-api-token"
+      }
+    }
+  }
+}
+```
+
+</details>
+
+### Install in Windsurf
+
+Add this to your Windsurf MCP config file. See [Windsurf MCP docs](https://docs.windsurf.com/windsurf/mcp) for more info.
+
+```json
+{
+  "mcpServers": {
+    "dokploy-mcp": {
+      "command": "npx",
+      "args": ["-y", "@ahdev/dokploy-mcp"],
+      "env": {
+        "DOKPLOY_URL": "https://your-dokploy-server.com/api",
+        "DOKPLOY_AUTH_TOKEN": "your-dokploy-api-token"
+      }
+    }
+  }
+}
+```
+
+### Install in VS Code
+
+[<img alt="Install in VS Code (npx)" src="https://img.shields.io/badge/VS_Code-VS_Code?style=flat-square&label=Install%20Dokploy%20MCP&color=0098FF">](https://insiders.vscode.dev/redirect?url=vscode%3Amcp%2Finstall%3F%7B%22name%22%3A%22dokploy-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40ahdev%2Fdokploy-mcp%40latest%22%5D%7D)
+[<img alt="Install in VS Code Insiders (npx)" src="https://img.shields.io/badge/VS_Code_Insiders-VS_Code_Insiders?style=flat-square&label=Install%20Dokploy%20MCP&color=24bfa5">](https://insiders.vscode.dev/redirect?url=vscode-insiders%3Amcp%2Finstall%3F%7B%22name%22%3A%22dokploy-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40ahdev%2Fdokploy-mcp%40latest%22%5D%7D)
+
+Add this to your VS Code MCP config file. See [VS Code MCP docs](https://code.visualstudio.com/docs/copilot/chat/mcp-servers) for more info.
+
+```json
+{
+  "servers": {
+    "dokploy-mcp": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@ahdev/dokploy-mcp"],
+      "env": {
+        "DOKPLOY_URL": "https://your-dokploy-server.com/api",
+        "DOKPLOY_AUTH_TOKEN": "your-dokploy-api-token"
+      }
+    }
+  }
+}
+```
+
+### Install in Zed
+
+Add this to your Zed `settings.json`. See [Zed Context Server docs](https://zed.dev/docs/assistant/context-servers) for more info.
+
+```json
+{
+  "context_servers": {
+    "dokploy-mcp": {
+      "command": {
+        "path": "npx",
+        "args": ["-y", "@ahdev/dokploy-mcp"]
+      },
+      "settings": {
+        "DOKPLOY_URL": "https://your-dokploy-server.com/api",
+        "DOKPLOY_AUTH_TOKEN": "your-dokploy-api-token"
+      }
+    }
+  }
+}
+```
+
+### Install in Claude Code
+
+Run this command. See [Claude Code MCP docs](https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/tutorials#set-up-model-context-protocol-mcp) for more info.
+
+```sh
+claude mcp add dokploy-mcp -- npx -y @ahdev/dokploy-mcp
+```
+
+Then set the environment variables:
+```sh
+export DOKPLOY_URL="https://your-dokploy-server.com/api"
+export DOKPLOY_AUTH_TOKEN="your-dokploy-api-token"
+```
+
+### Install in Claude Desktop
+
+Add this to your Claude Desktop `claude_desktop_config.json` file. See [Claude Desktop MCP docs](https://modelcontextprotocol.io/quickstart/user) for more info.
+
+```json
+{
+  "mcpServers": {
+    "dokploy-mcp": {
+      "command": "npx",
+      "args": ["-y", "@ahdev/dokploy-mcp"],
+      "env": {
+        "DOKPLOY_URL": "https://your-dokploy-server.com/api",
+        "DOKPLOY_AUTH_TOKEN": "your-dokploy-api-token"
+      }
+    }
+  }
+}
+```
+
+### Install in BoltAI
+
+Open the "Settings" page of the app, navigate to "Plugins," and enter the following JSON:
+
+```json
+{
+  "mcpServers": {
+    "dokploy-mcp": {
+      "command": "npx",
+      "args": ["-y", "@ahdev/dokploy-mcp"],
+      "env": {
+        "DOKPLOY_URL": "https://your-dokploy-server.com/api",
+        "DOKPLOY_AUTH_TOKEN": "your-dokploy-api-token"
+      }
+    }
+  }
+}
+```
+
+### Using Docker
+
+If you prefer to run the MCP server in a Docker container:
+
+1.  **Build the Docker Image:**
+
+    Clone the repository and build the image:
+
+    ```bash
+    git clone https://github.com/andradehenrique/dokploy-mcp.git
+    cd dokploy-mcp
+    docker build -t dokploy-mcp .
+    ```
+
+2. **Configure Your MCP Client:**
+
+    Update your MCP client's configuration to use the Docker command.
+
+    *Example for VS Code:*
+
+    ```json
+    {
+      "servers": {
+        "dokploy-mcp": {
+          "type": "stdio",
+          "command": "docker",
+          "args": [
+            "run", "-i", "--rm",
+            "-e", "DOKPLOY_URL=https://your-dokploy-server.com/api",
+            "-e", "DOKPLOY_AUTH_TOKEN=your-dokploy-api-token",
+            "dokploy-mcp"
+          ]
+        }
+      }
+    }
+    ```
+
+    *Example for Cursor:*
+
+    ```json
+    {
+      "mcpServers": {
+        "dokploy-mcp": {
+          "command": "docker",
+          "args": [
+            "run", "-i", "--rm",
+            "-e", "DOKPLOY_URL=https://your-dokploy-server.com/api",
+            "-e", "DOKPLOY_AUTH_TOKEN=your-dokploy-api-token",
+            "dokploy-mcp"
+          ]
+        }
+      }
+    }
+    ```
+
+    *Example for Claude Desktop:*
+
+    ```json
+    {
+      "mcpServers": {
+        "dokploy-mcp": {
+          "command": "docker",
+          "args": [
+            "run", "-i", "--rm",
+            "-e", "DOKPLOY_URL=https://your-dokploy-server.com/api",
+            "-e", "DOKPLOY_AUTH_TOKEN=your-dokploy-api-token",
+            "dokploy-mcp"
+          ]
+        }
+      }
+    }
+    ```
+
+### Install in Windows
+
+The configuration on Windows is slightly different compared to Linux or macOS. Use `cmd` as the command wrapper:
+
+```json
+{
+  "mcpServers": {
+    "dokploy-mcp": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@ahdev/dokploy-mcp"
+      ],
+      "env": {
+        "DOKPLOY_URL": "https://your-dokploy-server.com/api",
+        "DOKPLOY_AUTH_TOKEN": "your-dokploy-api-token"
+      }
+    }
+  }
+}
+```
+
+### Environment Variables
+
+- `DOKPLOY_URL`: Your Dokploy server API URL (required)
+- `DOKPLOY_AUTH_TOKEN`: Your Dokploy API authentication token (required)
+
+## 📚 Available Tools
 
 This MCP server currently provides the following tools for comprehensive project and application management:
 
@@ -48,7 +322,7 @@ This MCP server currently provides the following tools for comprehensive project
     *   Description: Gets a specific application by its ID in Dokploy.
     *   Input Schema: `{ "applicationId": "string" }` (The ID of the application to retrieve).
 
-## Architecture
+## 🏗️ Architecture
 
 The Dokploy MCP Server is built using:
 
@@ -60,68 +334,134 @@ The Dokploy MCP Server is built using:
 
 The server listens for MCP requests, executes the corresponding tool (e.g., fetching project data from Dokploy), and returns the results in MCP format.
 
-## Installation
+## 🔧 Development
 
-1.  **Prerequisites**:
-    *   Node.js (LTS version recommended, e.g., v18, v20)
-    *   npm (comes with Node.js)
-    *   A running Dokploy server instance accessible from where this MCP server will run.
+Clone the project and install dependencies:
 
-2.  **No installation required**: The package will be automatically downloaded and executed using `npx` when configured with your MCP client.
+```bash
+git clone https://github.com/andradehenrique/dokploy-mcp.git
+cd dokploy-mcp
+npm install
+```
 
-## Usage
+Build:
 
-Dokploy MCP is designed to be used as a Model Context Protocol (MCP) server. This allows tools like Claude Code (and its VS Code extension) to interact with Dokploy MCP for enhanced functionalities.
+```bash
+npm run build
+```
 
-### 1. Configuring with VS Code (for MCP-enabled extensions like Claude Code)
-
-If you are using an MCP-enabled extension within VS Code (such as the official Claude Code extension), you can configure Dokploy MCP directly in your VS Code `settings.json` file.
-
-1.  Open your VS Code `settings.json` file (Command Palette: `Ctrl+Shift+P` or `Cmd+Shift+P`, then "Preferences: Open User Settings (JSON)").
-2.  Add or update the `mcp.servers` configuration:
+### Local Configuration Example
 
 ```json
 {
-    "mcp": {
-        "servers": {
-            "dokploy-mcp": {
-                "type": "stdio",
-                "command": "npx",
-                "args": [
-                    "-y",
-                    "@ahdev/dokploy-mcp"
-                ],
-                "env": {
-                    "DOKPLOY_API_URL": "http://your-dokploy-server-url.com/api",
-                    "DOKPLOY_API_TOKEN": "<your-dokploy-api-token>" 
-                }
-            }
-        }
+  "mcpServers": {
+    "dokploy-mcp": {
+      "command": "npx",
+      "args": ["tsx", "/path/to/dokploy-mcp/src/index.ts"],
+      "env": {
+        "DOKPLOY_URL": "https://your-dokploy-server.com/api",
+        "DOKPLOY_AUTH_TOKEN": "your-dokploy-api-token"
+      }
     }
+  }
 }
 ```
 
-**Key fields:**
-*   `"dokploy-mcp"`: Your chosen identifier for this server.
-*   `"command"` and `"args"`: Uses `npx` to automatically download and run the latest version of `@ahdev/dokploy-mcp` from npm. The `-y` flag automatically confirms the installation.
-*   `"env"`: Critical environment variables for Dokploy MCP to connect to your Dokploy instance (e.g., API URL, authentication tokens).
+### Testing with MCP Inspector
 
-### 2. Configuring for Claude Code (General Setup)
+```bash
+npx -y @modelcontextprotocol/inspector npx @ahdev/dokploy-mcp
+```
 
-For general instructions on how to set up Model Context Protocol (MCP) servers with Claude Code, including methods like using environment variables to point to server configuration files, please refer to the official Anthropic documentation:
+## 🔧 Troubleshooting
 
-[Set up Model Context Protocol (MCP) - Anthropic Docs](https://docs.anthropic.com/en/docs/claude-code/tutorials#set-up-model-context-protocol-mcp)
+### ERR_MODULE_NOT_FOUND
 
-This documentation provides the most up-to-date information on how Claude Code discovers and interacts with MCP servers.
+If you see this error, try using `bunx` instead of `npx`.
 
-## Contributing
+```json
+{
+  "mcpServers": {
+    "dokploy-mcp": {
+      "command": "bunx",
+      "args": ["-y", "@ahdev/dokploy-mcp"],
+      "env": {
+        "DOKPLOY_URL": "https://your-dokploy-server.com/api",
+        "DOKPLOY_AUTH_TOKEN": "your-dokploy-api-token"
+      }
+    }
+  }
+}
+```
+
+This often resolves module resolution issues, especially in environments where `npx` does not properly install or resolve packages.
+
+### ESM Resolution Issues
+
+If you encounter an error like: `Error: Cannot find module 'uriTemplate.js'` try running with the `--experimental-vm-modules` flag:
+
+```json
+{
+  "mcpServers": {
+    "dokploy-mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "--node-options=--experimental-vm-modules",
+        "@ahdev/dokploy-mcp"
+      ],
+      "env": {
+        "DOKPLOY_URL": "https://your-dokploy-server.com/api",
+        "DOKPLOY_AUTH_TOKEN": "your-dokploy-api-token"
+      }
+    }
+  }
+}
+```
+
+### TLS/Certificate Issues
+
+Use the `--experimental-fetch` flag with `npx` to bypass TLS-related issues:
+
+```json
+{
+  "mcpServers": {
+    "dokploy-mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "--node-options=--experimental-fetch",
+        "@ahdev/dokploy-mcp"
+      ],
+      "env": {
+        "DOKPLOY_URL": "https://your-dokploy-server.com/api",
+        "DOKPLOY_AUTH_TOKEN": "your-dokploy-api-token"
+      }
+    }
+  }
+}
+```
+
+### MCP Client Errors
+
+1. Try adding `@latest` to the package name.
+
+2. Try using `bunx` as an alternative.
+
+3. Try using `deno` as an alternative.
+
+4. Make sure you are using Node v18 or higher to have native fetch support with `npx`.
+
+5. Verify your `DOKPLOY_URL` and `DOKPLOY_AUTH_TOKEN` environment variables are correctly set.
+
+## 🤝 Contributing
 
 We welcome contributions! If you'd like to contribute to the Dokploy MCP Server, please check out our [Contributing Guide](CONTRIBUTING.md).
 
-## Support
+## 🆘 Support
 
 If you encounter any issues, have questions, or want to suggest a feature, please [open an issue](https://github.com/andradehenrique/dokploy-mcp/issues) in our GitHub repository.
 
-## License
+## 📄 License
 
 This project is licensed under the [MIT License](LICENSE).
