@@ -120,7 +120,7 @@ We welcome contributions! If you'd like to contribute to the Dokploy MCP Server,
 
 ## Support
 
-If you encounter any issues, have questions, or want to suggest a feature, please [open an issue](https://github.com/yourusername/dokploy-mcp/issues) in our GitHub repository.
+If you encounter any issues, have questions, or want to suggest a feature, please [open an issue](https://github.com/andradehenrique/dokploy-mcp/issues) in our GitHub repository.
 
 ## License
 
