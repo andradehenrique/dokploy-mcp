@@ -64,29 +64,10 @@ The server listens for MCP requests, executes the corresponding tool (e.g., fetc
 
 1.  **Prerequisites**:
     *   Node.js (LTS version recommended, e.g., v18, v20)
-    *   npm or yarn
+    *   npm (comes with Node.js)
     *   A running Dokploy server instance accessible from where this MCP server will run.
 
-2.  **Clone the repository**:
-    ```sh-session
-    $ git clone https://github.com/andradehenrique/dokploy-mcp.git
-    $ cd dokploy-mcp
-    ```
-
-3.  **Install dependencies**:
-    ```sh-session
-    $ npm install
-    # or
-    $ yarn install
-    ```
-
-5.  **Build the project (for production/MCP usage)**:
-    ```sh-session
-    $ npm run build
-    # or
-    $ yarn build
-    ```
-    This will create a production build in a directory like `build` or `dist`. Note the path to the main JavaScript file (e.g., `build/index.js`).
+2.  **No installation required**: The package will be automatically downloaded and executed using `npx` when configured with your MCP client.
 
 ## Usage
 
@@ -105,9 +86,10 @@ If you are using an MCP-enabled extension within VS Code (such as the official C
         "servers": {
             "dokploy-mcp": {
                 "type": "stdio",
-                "command": "node",
+                "command": "npx",
                 "args": [
-                    "/path/to/your/dokploy-mcp/build/index.js" 
+                    "-y",
+                    "@ahdev/dokploy-mcp"
                 ],
                 "env": {
                     "DOKPLOY_API_URL": "http://your-dokploy-server-url.com/api",
@@ -121,7 +103,7 @@ If you are using an MCP-enabled extension within VS Code (such as the official C
 
 **Key fields:**
 *   `"dokploy-mcp"`: Your chosen identifier for this server.
-*   `"command"` and `"args"`: Specify how to run your built Dokploy MCP. Ensure the path in `args` is correct.
+*   `"command"` and `"args"`: Uses `npx` to automatically download and run the latest version of `@ahdev/dokploy-mcp` from npm. The `-y` flag automatically confirms the installation.
 *   `"env"`: Critical environment variables for Dokploy MCP to connect to your Dokploy instance (e.g., API URL, authentication tokens).
 
 ### 2. Configuring for Claude Code (General Setup)
