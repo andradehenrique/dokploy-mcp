@@ -136,20 +136,6 @@ Add this to your Zed `settings.json`. See [Zed Context Server docs](https://zed.
 }
 ```
 
-### Install in Claude Code
-
-Run this command. See [Claude Code MCP docs](https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/tutorials#set-up-model-context-protocol-mcp) for more info.
-
-```sh
-claude mcp add dokploy-mcp -- npx -y @ahdev/dokploy-mcp
-```
-
-Then set the environment variables:
-```sh
-export DOKPLOY_URL="https://your-dokploy-server.com/api"
-export DOKPLOY_AUTH_TOKEN="your-dokploy-api-token"
-```
-
 ### Install in Claude Desktop
 
 Add this to your Claude Desktop `claude_desktop_config.json` file. See [Claude Desktop MCP docs](https://modelcontextprotocol.io/quickstart/user) for more info.
