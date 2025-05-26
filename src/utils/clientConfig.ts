@@ -1,13 +1,52 @@
-export function getClientConfig() {
-  const dokployUrl = process.env.DOKPLOY_URL;
-  const authToken = process.env.DOKPLOY_AUTH_TOKEN;
+interface Config {
+  dokployUrl: string;
+  authToken: string;
+  timeout: number;
+  retryAttempts: number;
+  retryDelay: number;
+}
 
-  if (!dokployUrl) {
-    throw new Error("Environment variable DOKPLOY_URL is not defined. Please set it before running the application.");
-  }
-  if (!authToken) {
-    throw new Error("Environment variable DOKPLOY_AUTH_TOKEN is not defined. Please set it before running the application.");
+class ConfigManager {
+  private static instance: ConfigManager;
+  private config: Config | null = null;
+
+  private constructor() {}
+
+  static getInstance(): ConfigManager {
+    if (!ConfigManager.instance) {
+      ConfigManager.instance = new ConfigManager();
+    }
+    return ConfigManager.instance;
   }
 
-  return { dokployUrl, authToken };
+  getConfig(): Config {
+    if (!this.config) {
+      this.config = this.loadConfig();
+    }
+    return this.config;
+  }
+
+  private loadConfig(): Config {
+    const dokployUrl = process.env.DOKPLOY_URL;
+    const authToken = process.env.DOKPLOY_AUTH_TOKEN;
+
+    if (!dokployUrl) {
+      throw new Error("Environment variable DOKPLOY_URL is not defined");
+    }
+    if (!authToken) {
+      throw new Error("Environment variable DOKPLOY_AUTH_TOKEN is not defined");
+    }
+
+    return {
+      dokployUrl,
+      authToken,
+      timeout: parseInt(process.env.DOKPLOY_TIMEOUT || '30000'),
+      retryAttempts: parseInt(process.env.DOKPLOY_RETRY_ATTEMPTS || '3'),
+      retryDelay: parseInt(process.env.DOKPLOY_RETRY_DELAY || '1000')
+    };
+  }
+}
+
+export function getClientConfig(): Config {
+  return ConfigManager.getInstance().getConfig();
 }

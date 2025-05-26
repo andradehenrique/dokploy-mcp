@@ -1,8 +1,9 @@
 import { z } from "zod";
-import { defineTool } from "../toolTypes.js";
 import { createHttpClient } from "../../../utils/httpClient.js";
+import { createTool } from "../toolFactory.js";
+import { ResponseFormatter } from "../../../utils/responseFormatter.js";
 
-export const applicationOne = defineTool({
+export const applicationOne = createTool({
   name: "application-one",
   description: "Gets a specific application by its ID in Dokploy.",
   schema: z.object({
@@ -12,8 +13,16 @@ export const applicationOne = defineTool({
     const httpClient = createHttpClient();
     const application = await httpClient.get("/application.one", { applicationId: input.applicationId });
 
-    return {
-      content: [{ type: "text", text: JSON.stringify(application, null, 2) }],
-    };
+    if (!application) {
+      return ResponseFormatter.error(
+        "Failed to fetch application",
+        `Application with ID "${input.applicationId}" not found`
+      );
+    }
+
+    return ResponseFormatter.success(
+      `Successfully fetched application "${input.applicationId}"`,
+      application
+    );
   },
 });

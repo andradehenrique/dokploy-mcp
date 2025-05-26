@@ -1,8 +1,9 @@
 import { z } from "zod";
-import { defineTool } from "../toolTypes.js";
 import { createHttpClient } from "../../../utils/httpClient.js";
+import { createTool } from "../toolFactory.js";
+import { ResponseFormatter } from "../../../utils/responseFormatter.js";
 
-export const projectOne = defineTool({
+export const projectOne = createTool({
   name: "project-one",
   description: "Gets a specific project by its ID in Dokploy.",
   schema: z.object({
@@ -12,8 +13,16 @@ export const projectOne = defineTool({
     const httpClient = createHttpClient();
     const project = await httpClient.get("/project.one", { projectId: input.projectId });
 
-    return {
-      content: [{ type: "text", text: JSON.stringify(project, null, 2) }],
-    };
+    if (!project) {
+      return ResponseFormatter.error(
+        "Failed to fetch project",
+        `Project with ID "${input.projectId}" not found`
+      );
+    }
+
+    return ResponseFormatter.success(
+      `Successfully fetched project "${input.projectId}"`,
+      project
+    );
   },
 });

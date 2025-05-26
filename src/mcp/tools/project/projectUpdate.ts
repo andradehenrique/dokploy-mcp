@@ -1,8 +1,9 @@
 import { z } from "zod";
-import { defineTool } from "../toolTypes.js";
 import { createHttpClient } from "../../../utils/httpClient.js";
+import { createTool } from "../toolFactory.js";
+import { ResponseFormatter } from "../../../utils/responseFormatter.js";
 
-export const projectUpdate = defineTool({
+export const projectUpdate = createTool({
   name: "project-update",
   description: "Updates an existing project in Dokploy.",
   schema: z.object({
@@ -15,10 +16,11 @@ export const projectUpdate = defineTool({
   }),
   handler: async (input) => {
     const httpClient = createHttpClient();
-    await httpClient.post("/project.update", input);
+    const response = await httpClient.post("/project.update", input);
     
-    return {
-      content: [{ type: "text", text: `Project "${input.projectId}" updated successfully.` }],
-    };
+    return ResponseFormatter.success(
+      `Project "${input.projectId}" updated successfully`,
+      response
+    );
   },
 });

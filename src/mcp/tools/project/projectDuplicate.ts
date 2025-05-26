@@ -1,6 +1,7 @@
 import { z } from "zod";
-import { defineTool } from "../toolTypes.js";
 import { createHttpClient } from "../../../utils/httpClient.js";
+import { createTool } from "../toolFactory.js";
+import { ResponseFormatter } from "../../../utils/responseFormatter.js";
 
 const serviceSchema = z.object({
   id: z.string().describe("The ID of the service."),
@@ -15,7 +16,7 @@ const serviceSchema = z.object({
   ]).describe("The type of the service."),
 });
 
-export const projectDuplicate = defineTool({
+export const projectDuplicate = createTool({
   name: "project-duplicate",
   description: "Duplicates an existing project in Dokploy with optional service selection.",
   schema: z.object({
@@ -27,10 +28,11 @@ export const projectDuplicate = defineTool({
   }),
   handler: async (input) => {
     const httpClient = createHttpClient();
-    await httpClient.post("/project.duplicate", input);
+    const response = await httpClient.post("/project.duplicate", input);
     
-    return {
-      content: [{ type: "text", text: `Project "${input.name}" duplicated successfully from source project "${input.sourceProjectId}".` }],
-    };
+    return ResponseFormatter.success(
+      `Project "${input.name}" duplicated successfully from source project "${input.sourceProjectId}"`,
+      response
+    );
   },
 });

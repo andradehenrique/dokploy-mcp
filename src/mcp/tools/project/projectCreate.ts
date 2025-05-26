@@ -1,8 +1,9 @@
 import { z } from "zod";
-import { defineTool } from "../toolTypes.js";
 import { createHttpClient } from "../../../utils/httpClient.js";
+import { createTool } from "../toolFactory.js";
+import { ResponseFormatter } from "../../../utils/responseFormatter.js";
 
-export const projectCreate = defineTool({
+export const projectCreate = createTool({
   name: "project-create",
   description: "Creates a new project in Dokploy.",
   schema: z.object({
@@ -12,10 +13,11 @@ export const projectCreate = defineTool({
   }),
   handler: async (input) => {
     const httpClient = createHttpClient();
-    await httpClient.post("/project.create", input);
+    const response = await httpClient.post("/project.create", input);
     
-    return {
-      content: [{ type: "text", text: `Project "${input.name}" created successfully.` }],
-    };
+    return ResponseFormatter.success(
+      `Project "${input.name}" created successfully`,
+      response
+    );
   },
 });

@@ -1,8 +1,9 @@
 import { z } from "zod";
-import { defineTool } from "../toolTypes.js";
 import { createHttpClient } from "../../../utils/httpClient.js";
+import { createTool } from "../toolFactory.js";
+import { ResponseFormatter } from "../../../utils/responseFormatter.js";
 
-export const projectRemove = defineTool({
+export const projectRemove = createTool({
   name: "project-remove",
   description: "Removes/deletes an existing project in Dokploy.",
   schema: z.object({
@@ -10,10 +11,11 @@ export const projectRemove = defineTool({
   }),
   handler: async (input) => {
     const httpClient = createHttpClient();
-    await httpClient.post("/project.remove", input);
+    const response = await httpClient.post("/project.remove", input);
     
-    return {
-      content: [{ type: "text", text: `Project "${input.projectId}" removed successfully.` }],
-    };
+    return ResponseFormatter.success(
+      `Project "${input.projectId}" removed successfully`,
+      response
+    );
   },
 });

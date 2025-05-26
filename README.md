@@ -308,6 +308,10 @@ This MCP server currently provides the following tools for comprehensive project
     *   Description: Gets a specific application by its ID in Dokploy.
     *   Input Schema: `{ "applicationId": "string" }` (The ID of the application to retrieve).
 
+*   **`application-create`**:
+    *   Description: Creates a new application in Dokploy.
+    *   Input Schema: `{ "name": "string", "appName": "string", "description": "string|null", "projectId": "string", "serverId": "string|null" }` (name and projectId are required, appName, description and serverId are optional).
+
 ## 🏗️ Architecture
 
 The Dokploy MCP Server is built using:
