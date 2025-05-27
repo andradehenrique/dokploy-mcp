@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createHttpClient } from "../../../utils/httpClient.js";
+import apiClient from "../../../utils/apiClient.js";
 import { createTool } from "../toolFactory.js";
 import { ResponseFormatter } from "../../../utils/responseFormatter.js";
 
@@ -13,13 +13,18 @@ export const applicationCreate = createTool({
     projectId: z.string().min(1).describe("The ID of the project where the application will be created."),
     serverId: z.string().nullable().optional().describe("The ID of the server where the application will be deployed."),
   }),
+  annotations: {
+    title: "Create Application",
+    destructiveHint: false,
+    idempotentHint: false,
+    openWorldHint: true,
+  },
   handler: async (input) => {
-    const httpClient = createHttpClient();
-    const response = await httpClient.post("/application.create", input);
+    const response = await apiClient.post("/application.create", input);
     
     return ResponseFormatter.success(
       `Application "${input.name}" created successfully in project "${input.projectId}"`,
-      response
+      response.data
     );
   },
 });

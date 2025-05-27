@@ -4,6 +4,8 @@
 
 Dokploy MCP Server exposes Dokploy functionalities as tools consumable via the Model Context Protocol (MCP). It allows MCP-compatible clients (e.g., AI models, other applications) to interact with your Dokploy server programmatically.
 
+This server focuses exclusively on **tools** for direct Dokploy API operations, providing a clean and efficient interface for project and application management.
+
 ## 🛠️ Getting Started
 
 ### Requirements
@@ -312,6 +314,16 @@ This MCP server currently provides the following tools for comprehensive project
     *   Description: Creates a new application in Dokploy.
     *   Input Schema: `{ "name": "string", "appName": "string", "description": "string|null", "projectId": "string", "serverId": "string|null" }` (name and projectId are required, appName, description and serverId are optional).
 
+### Tool Annotations
+
+All tools include semantic annotations to help MCP clients understand their behavior:
+
+*   **Read-Only Tools** (`readOnlyHint: true`): `project-all`, `project-one`, `application-one`
+*   **Destructive Tools** (`destructiveHint: true`): `project-update`, `project-remove`  
+*   **Creation Tools** (`destructiveHint: false`): `project-create`, `project-duplicate`, `application-create`
+*   **Idempotent Tools** (`idempotentHint: true`): All read-only operations
+*   **External API Tools** (`openWorldHint: true`): All tools (interact with Dokploy API)
+
 ## 🏗️ Architecture
 
 The Dokploy MCP Server is built using:
@@ -321,8 +333,9 @@ The Dokploy MCP Server is built using:
 *   **Stdio Transport**: By default, it communicates with MCP clients over standard input/output (stdio), as configured in `src/index.ts`.
 *   **Dokploy API Interaction**: It interacts with your Dokploy server's API to perform actions based on tool invocations.
 *   **HTTP Client Abstraction**: Uses a centralized HTTP client for consistent API communication and error handling.
+*   **Tool Annotations**: All tools include semantic annotations (readOnlyHint, destructiveHint, etc.) to help MCP clients understand tool behavior.
 
-The server listens for MCP requests, executes the corresponding tool (e.g., fetching project data from Dokploy), and returns the results in MCP format.
+The server listens for MCP requests, executes the corresponding tool (e.g., fetching project data from Dokploy), and returns the results in MCP format. Each tool includes comprehensive input validation and structured error handling.
 
 ## 🔧 Development
 

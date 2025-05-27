@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createHttpClient } from "../../../utils/httpClient.js";
+import apiClient from "../../../utils/apiClient.js";
 import { createTool } from "../toolFactory.js";
 import { ResponseFormatter } from "../../../utils/responseFormatter.js";
 
@@ -9,11 +9,16 @@ export const projectOne = createTool({
   schema: z.object({
     projectId: z.string().describe("The ID of the project to retrieve."),
   }),
+  annotations: {
+    title: "Get Project Details",
+    readOnlyHint: true,
+    idempotentHint: true,
+    openWorldHint: true,
+  },
   handler: async (input) => {
-    const httpClient = createHttpClient();
-    const project = await httpClient.get("/project.one", { projectId: input.projectId });
+    const project = await apiClient.get(`/project.one?projectId=${input.projectId}`);
 
-    if (!project) {
+    if (!project?.data) {
       return ResponseFormatter.error(
         "Failed to fetch project",
         `Project with ID "${input.projectId}" not found`
@@ -22,7 +27,7 @@ export const projectOne = createTool({
 
     return ResponseFormatter.success(
       `Successfully fetched project "${input.projectId}"`,
-      project
+      project.data
     );
   },
 });

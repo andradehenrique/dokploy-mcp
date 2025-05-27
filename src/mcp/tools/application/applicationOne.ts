@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createHttpClient } from "../../../utils/httpClient.js";
+import apiClient from "../../../utils/apiClient.js";
 import { createTool } from "../toolFactory.js";
 import { ResponseFormatter } from "../../../utils/responseFormatter.js";
 
@@ -9,11 +9,16 @@ export const applicationOne = createTool({
   schema: z.object({
     applicationId: z.string().describe("The ID of the application to retrieve."),
   }),
+  annotations: {
+    title: "Get Application Details",
+    readOnlyHint: true,
+    idempotentHint: true,
+    openWorldHint: true,
+  },
   handler: async (input) => {
-    const httpClient = createHttpClient();
-    const application = await httpClient.get("/application.one", { applicationId: input.applicationId });
+    const application = await apiClient.get(`/application.one?applicationId=${input.applicationId}`);
 
-    if (!application) {
+    if (!application?.data) {
       return ResponseFormatter.error(
         "Failed to fetch application",
         `Application with ID "${input.applicationId}" not found`
@@ -22,7 +27,7 @@ export const applicationOne = createTool({
 
     return ResponseFormatter.success(
       `Successfully fetched application "${input.applicationId}"`,
-      application
+      application.data
     );
   },
 });

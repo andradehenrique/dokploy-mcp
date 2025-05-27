@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createHttpClient } from "../../../utils/httpClient.js";
+import apiClient from "../../../utils/apiClient.js";
 import { createTool } from "../toolFactory.js";
 import { ResponseFormatter } from "../../../utils/responseFormatter.js";
 
@@ -14,13 +14,18 @@ export const projectUpdate = createTool({
     organizationId: z.string().optional().describe("The organization ID of the project."),
     env: z.string().optional().describe("Environment variables for the project."),
   }),
+  annotations: {
+    title: "Update Project",
+    destructiveHint: true,
+    idempotentHint: false,
+    openWorldHint: true,
+  },
   handler: async (input) => {
-    const httpClient = createHttpClient();
-    const response = await httpClient.post("/project.update", input);
+    const response = await apiClient.post("/project.update", input);
     
     return ResponseFormatter.success(
       `Project "${input.projectId}" updated successfully`,
-      response
+      response.data
     );
   },
 });

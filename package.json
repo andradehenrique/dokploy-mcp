@@ -1,6 +1,6 @@
 {
   "name": "@ahdev/dokploy-mcp",
-  "version": "1.0.8",
+  "version": "1.1.0",
   "description": "MCP Server for Dokploy API",
   "main": "build/index.js",
   "bin": {
@@ -31,9 +31,11 @@
   "type": "module",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.0",
+    "axios": "^1.9.0",
     "zod": "^3.25.28"
   },
   "devDependencies": {
+    "@types/axios": "^0.9.36",
     "@types/node": "^22.15.21",
     "typescript": "^5.8.3"
   }

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createHttpClient } from "../../../utils/httpClient.js";
+import apiClient from "../../../utils/apiClient.js";
 import { createTool } from "../toolFactory.js";
 import { ResponseFormatter } from "../../../utils/responseFormatter.js";
 
@@ -26,13 +26,18 @@ export const projectDuplicate = createTool({
     includeServices: z.boolean().default(true).describe("Whether to include services in the duplication. Defaults to true."),
     selectedServices: z.array(serviceSchema).optional().describe("Array of specific services to include. If not provided, all services will be included when includeServices is true."),
   }),
+  annotations: {
+    title: "Duplicate Project",
+    destructiveHint: false,
+    idempotentHint: false,
+    openWorldHint: true,
+  },
   handler: async (input) => {
-    const httpClient = createHttpClient();
-    const response = await httpClient.post("/project.duplicate", input);
+    const response = await apiClient.post("/project.duplicate", input);
     
     return ResponseFormatter.success(
       `Project "${input.name}" duplicated successfully from source project "${input.sourceProjectId}"`,
-      response
+      response.data
     );
   },
 });

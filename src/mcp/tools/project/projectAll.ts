@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createHttpClient } from "../../../utils/httpClient.js";
+import apiClient from "../../../utils/apiClient.js";
 import { createTool } from "../toolFactory.js";
 import { ResponseFormatter } from "../../../utils/responseFormatter.js";
 
@@ -7,11 +7,16 @@ export const projectAll = createTool({
   name: "project-all",
   description: "Lists all projects in Dokploy.",
   schema: z.object({}),
+  annotations: {
+    title: "List All Projects",
+    readOnlyHint: true,
+    idempotentHint: true,
+    openWorldHint: true,
+  },
   handler: async () => {
-    const httpClient = createHttpClient();
-    const response = await httpClient.get("/project.all");
+    const response = await apiClient.get("/project.all");
 
-    if (!response) {
+    if (!response?.data) {
       return ResponseFormatter.error(
         "Failed to fetch projects",
         "No response data received"
@@ -20,7 +25,7 @@ export const projectAll = createTool({
 
     return ResponseFormatter.success(
       "Successfully fetched all projects",
-      response
+      response.data
     );
   },
 });
