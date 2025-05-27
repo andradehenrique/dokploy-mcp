@@ -287,69 +287,80 @@ The configuration on Windows is slightly different compared to Linux or macOS. U
 
 ## 📚 Available Tools
 
-This MCP server currently provides the following tools for comprehensive project and application management:
+This MCP server provides comprehensive tools for Dokploy project and application management through **31 tools** organized into two main categories:
 
-- **`project-all`**:
+### 🗂️ Project Management (6 tools)
 
-  - Description: Lists all projects in Dokploy.
-  - Input Schema: None.
+Complete project lifecycle management including creation, updates, duplication, and deletion:
 
-- **`project-one`**:
+- **`project-all`** - List all projects
+- **`project-one`** - Get project details
+- **`project-create`** - Create new projects
+- **`project-update`** - Update project configurations
+- **`project-duplicate`** - Duplicate projects with selective service copying
+- **`project-remove`** - Delete projects
 
-  - Description: Gets a specific project by its ID in Dokploy.
-  - Input Schema: `{ "projectId": "string" }` (The ID of the project to retrieve).
+### 🚀 Application Management (25 tools)
 
-- **`project-create`**:
+Comprehensive application lifecycle and configuration management:
 
-  - Description: Creates a new project in Dokploy.
-  - Input Schema: `{ "name": "string", "description": "string|null", "env": "string" }` (name is required, description and env are optional).
+#### Core Operations
 
-- **`project-update`**:
+- **CRUD Operations**: Create, read, update, delete applications
+- **Lifecycle Management**: Deploy, redeploy, start, stop, reload applications
+- **Utility Operations**: Move between projects, clean queues, refresh tokens
 
-  - Description: Updates an existing project in Dokploy.
-  - Input Schema: `{ "projectId": "string", "name": "string", "description": "string|null", "createdAt": "string", "organizationId": "string", "env": "string" }` (projectId is required, all other fields are optional).
+#### Git Provider Integrations
 
-- **`project-duplicate`**:
+Support for multiple Git providers with specific configurations:
 
-  - Description: Duplicates an existing project in Dokploy with optional service selection.
-  - Input Schema: `{ "sourceProjectId": "string", "name": "string", "description": "string", "includeServices": "boolean", "selectedServices": "array" }` (sourceProjectId and name are required, supports selective service duplication).
+- **GitHub Provider** - Full GitHub integration with webhooks
+- **GitLab Provider** - Complete GitLab project integration
+- **Bitbucket Provider** - Bitbucket repository management
+- **Gitea Provider** - Self-hosted Gitea integration
+- **Git Provider** - Custom Git repository support
+- **Docker Provider** - Direct Docker image deployment
 
-- **`project-remove`**:
+#### Configuration Management
 
-  - Description: Removes/deletes an existing project in Dokploy.
-  - Input Schema: `{ "projectId": "string" }` (The ID of the project to remove).
+- **Build Settings** - Configure build types (Dockerfile, Heroku, Nixpacks, etc.)
+- **Environment Management** - Environment variables and build arguments
+- **Monitoring Integration** - Application monitoring and metrics
+- **Traefik Configuration** - Load balancer and reverse proxy settings
 
-- **`application-one`**:
-
-  - Description: Gets a specific application by its ID in Dokploy.
-  - Input Schema: `{ "applicationId": "string" }` (The ID of the application to retrieve).
-
-- **`application-create`**:
-  - Description: Creates a new application in Dokploy.
-  - Input Schema: `{ "name": "string", "appName": "string", "description": "string|null", "projectId": "string", "serverId": "string|null" }` (name and projectId are required, appName, description and serverId are optional).
+For detailed information about each tool, including input schemas, required fields, and usage examples, see **[TOOLS.md](TOOLS.md)**.
 
 ### Tool Annotations
 
 All tools include semantic annotations to help MCP clients understand their behavior:
 
-- **Read-Only Tools** (`readOnlyHint: true`): `project-all`, `project-one`, `application-one`
-- **Destructive Tools** (`destructiveHint: true`): `project-update`, `project-remove`
-- **Creation Tools** (`destructiveHint: false`): `project-create`, `project-duplicate`, `application-create`
-- **Idempotent Tools** (`idempotentHint: true`): All read-only operations
-- **External API Tools** (`openWorldHint: true`): All tools (interact with Dokploy API)
+- **Read-Only Tools** (`readOnlyHint: true`): Safe operations that only retrieve data
+- **Destructive Tools** (`destructiveHint: true`): Operations that modify or delete resources
+- **Creation Tools** (`destructiveHint: false`): Operations that create new resources
+- **Idempotent Tools** (`idempotentHint: true`): Operations safe to repeat
+- **External API Tools** (`openWorldHint: true`): All tools interact with Dokploy API
 
 ## 🏗️ Architecture
 
 The Dokploy MCP Server is built using:
 
-- **`@modelcontextprotocol/sdk`**: For creating the MCP server and defining tools.
-- **Node.js & TypeScript**: As the underlying runtime and language.
-- **Stdio Transport**: By default, it communicates with MCP clients over standard input/output (stdio), as configured in `src/index.ts`.
-- **Dokploy API Interaction**: It interacts with your Dokploy server's API to perform actions based on tool invocations.
-- **HTTP Client Abstraction**: Uses a centralized HTTP client for consistent API communication and error handling.
-- **Tool Annotations**: All tools include semantic annotations (readOnlyHint, destructiveHint, etc.) to help MCP clients understand tool behavior.
+- **`@modelcontextprotocol/sdk`**: For creating the MCP server and defining tools
+- **Node.js & TypeScript**: As the underlying runtime and language
+- **Stdio Transport**: Communicates with MCP clients over standard input/output (stdio)
+- **Dokploy API Integration**: Direct interaction with Dokploy server's REST API
+- **Comprehensive Tool Coverage**: Complete implementation of all Dokploy application and project endpoints
+- **Robust Error Handling**: Centralized HTTP client with retry logic and structured error responses
+- **Schema Validation**: Full Zod-based input validation matching OpenAPI specifications
+- **Tool Annotations**: Semantic annotations (readOnlyHint, destructiveHint, etc.) for enhanced MCP client understanding
 
-The server listens for MCP requests, executes the corresponding tool (e.g., fetching project data from Dokploy), and returns the results in MCP format. Each tool includes comprehensive input validation and structured error handling.
+The server architecture supports:
+
+- **31 Tools** covering all project and application management operations
+- **Multiple Git Providers** (GitHub, GitLab, Bitbucket, Gitea, custom Git)
+- **Flexible Configuration** for builds, deployments, and monitoring
+- **Type-Safe Operations** with comprehensive TypeScript support
+
+Each tool includes input validation, API integration, and structured response formatting for consistent MCP client interaction.
 
 ## 🔧 Development
 
@@ -389,6 +400,11 @@ npm run build
 ```bash
 npx -y @modelcontextprotocol/inspector npx @ahdev/dokploy-mcp
 ```
+
+### Documentation
+
+- **[TOOLS.md](TOOLS.md)** - Complete tool reference with schemas and examples
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** - Contributing guidelines
 
 ## 🔧 Troubleshooting
 
