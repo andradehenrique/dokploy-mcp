@@ -40,9 +40,9 @@ class ConfigManager {
     return {
       dokployUrl,
       authToken,
-      timeout: parseInt(process.env.DOKPLOY_TIMEOUT || '30000'),
-      retryAttempts: parseInt(process.env.DOKPLOY_RETRY_ATTEMPTS || '3'),
-      retryDelay: parseInt(process.env.DOKPLOY_RETRY_DELAY || '1000')
+      timeout: parseInt(process.env.DOKPLOY_TIMEOUT || "30000", 10),
+      retryAttempts: parseInt(process.env.DOKPLOY_RETRY_ATTEMPTS || "3", 10),
+      retryDelay: parseInt(process.env.DOKPLOY_RETRY_DELAY || "1000", 10),
     };
   }
 }

@@ -1,8 +1,8 @@
 export enum LogLevel {
-  ERROR = 'error',
-  WARN = 'warn',
-  INFO = 'info',
-  DEBUG = 'debug'
+  ERROR = "error",
+  WARN = "warn",
+  INFO = "info",
+  DEBUG = "debug",
 }
 
 interface LogEntry {
@@ -13,16 +13,21 @@ interface LogEntry {
 }
 
 class Logger {
-  constructor(private context: string = 'MCP-Server') {}
+  constructor(private context: string = "MCP-Server") {}
 
-  private log(level: LogLevel, message: string, meta?: Record<string, unknown>) {
+  private log(
+    level: LogLevel,
+    message: string,
+    meta?: Record<string, unknown>
+  ) {
     const entry: LogEntry = {
       level,
       message,
       timestamp: new Date().toISOString(),
-      context: { service: this.context, ...meta }
+      context: { service: this.context, ...meta },
     };
-    
+
+    // eslint-disable-next-line no-console
     console.error(JSON.stringify(entry));
   }
 

@@ -16,7 +16,9 @@ export const projectOne = createTool({
     openWorldHint: true,
   },
   handler: async (input) => {
-    const project = await apiClient.get(`/project.one?projectId=${input.projectId}`);
+    const project = await apiClient.get(
+      `/project.one?projectId=${input.projectId}`
+    );
 
     if (!project?.data) {
       return ResponseFormatter.error(

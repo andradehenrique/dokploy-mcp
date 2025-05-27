@@ -4,7 +4,7 @@ import apiClient from "../../utils/apiClient.js";
 import { ResponseFormatter } from "../../utils/responseFormatter.js";
 
 // Updated to match MCP SDK response format
-export type ToolHandler<T> = (input: T) => Promise<{ 
+export type ToolHandler<T> = (input: T) => Promise<{
   content: { type: "text"; text: string }[];
   isError?: boolean;
 }>;
@@ -26,85 +26,99 @@ export interface ToolDefinition<TShape extends ZodRawShape> {
 }
 
 interface ToolContext {
-    apiClient: typeof apiClient;
-    logger: ReturnType<typeof createLogger>;
+  apiClient: typeof apiClient;
+  logger: ReturnType<typeof createLogger>;
 }
 
-const logger = createLogger('ToolFactory');
+const logger = createLogger("ToolFactory");
 
 export function createToolContext(): ToolContext {
-    return {
-        apiClient,
-        logger
-    };
+  return {
+    apiClient,
+    logger,
+  };
 }
 
 export function createTool<TShape extends import("zod").ZodRawShape>(
-    definition: ToolDefinition<TShape>
+  definition: ToolDefinition<TShape>
 ): ToolDefinition<TShape> {
-    return {
-        ...definition,
-        handler: async (input) => {
-            const context = createToolContext();
+  return {
+    ...definition,
+    handler: async (input) => {
+      const context = createToolContext();
 
-            try {
-                // Validate input against schema
-                const validationResult = definition.schema.safeParse(input);
-                if (!validationResult.success) {
-                    context.logger.warn(`Input validation failed for tool: ${definition.name}`, {
-                        errors: validationResult.error.errors,
-                        input
-                    });
-                    
-                    const errorMessages = validationResult.error.errors
-                        .map(err => `${err.path.join('.')}: ${err.message}`)
-                        .join(', ');
-                    
-                    return ResponseFormatter.error(
-                        `Invalid input for tool: ${definition.name}`,
-                        `Validation errors: ${errorMessages}`
-                    );
-                }
-
-                context.logger.info(`Executing tool: ${definition.name}`, { input: validationResult.data });
-                const result = await definition.handler(validationResult.data);
-                context.logger.info(`Tool executed successfully: ${definition.name}`);
-                return result;
-            } catch (error) {
-                context.logger.error(`Tool execution failed: ${definition.name}`, {
-                    error: error instanceof Error ? error.message : 'Unknown error',
-                    input
-                });
-
-                // More specific error handling based on error types
-                if (error instanceof Error) {
-                    if (error.message.includes('401') || error.message.includes('Unauthorized')) {
-                        return ResponseFormatter.error(
-                            `Authentication failed for tool: ${definition.name}`,
-                            'Please check your DOKPLOY_AUTH_TOKEN configuration'
-                        );
-                    }
-                    
-                    if (error.message.includes('404') || error.message.includes('Not Found')) {
-                        return ResponseFormatter.error(
-                            `Resource not found`,
-                            `The requested resource for ${definition.name} could not be found`
-                        );
-                    }
-                    
-                    if (error.message.includes('500') || error.message.includes('Internal Server Error')) {
-                        return ResponseFormatter.error(
-                            `Server error occurred`,
-                            `Dokploy server encountered an internal error while processing ${definition.name}`
-                        );
-                    }
-                }
-
-                return ResponseFormatter.error(
-                    `Failed to execute tool: ${definition.name}`,
-                    `Error: ${error instanceof Error ? error.message : 'Unknown error occurred'}`
-                );
+      try {
+        // Validate input against schema
+        const validationResult = definition.schema.safeParse(input);
+        if (!validationResult.success) {
+          context.logger.warn(
+            `Input validation failed for tool: ${definition.name}`,
+            {
+              errors: validationResult.error.errors,
+              input,
             }
+          );
+
+          const errorMessages = validationResult.error.errors
+            .map((err) => `${err.path.join(".")}: ${err.message}`)
+            .join(", ");
+
+          return ResponseFormatter.error(
+            `Invalid input for tool: ${definition.name}`,
+            `Validation errors: ${errorMessages}`
+          );
         }
-    };
+
+        context.logger.info(`Executing tool: ${definition.name}`, {
+          input: validationResult.data,
+        });
+        const result = await definition.handler(validationResult.data);
+        context.logger.info(`Tool executed successfully: ${definition.name}`);
+        return result;
+      } catch (error) {
+        context.logger.error(`Tool execution failed: ${definition.name}`, {
+          error: error instanceof Error ? error.message : "Unknown error",
+          input,
+        });
+
+        // More specific error handling based on error types
+        if (error instanceof Error) {
+          if (
+            error.message.includes("401") ||
+            error.message.includes("Unauthorized")
+          ) {
+            return ResponseFormatter.error(
+              `Authentication failed for tool: ${definition.name}`,
+              "Please check your DOKPLOY_AUTH_TOKEN configuration"
+            );
+          }
+
+          if (
+            error.message.includes("404") ||
+            error.message.includes("Not Found")
+          ) {
+            return ResponseFormatter.error(
+              `Resource not found`,
+              `The requested resource for ${definition.name} could not be found`
+            );
+          }
+
+          if (
+            error.message.includes("500") ||
+            error.message.includes("Internal Server Error")
+          ) {
+            return ResponseFormatter.error(
+              `Server error occurred`,
+              `Dokploy server encountered an internal error while processing ${definition.name}`
+            );
+          }
+        }
+
+        return ResponseFormatter.error(
+          `Failed to execute tool: ${definition.name}`,
+          `Error: ${error instanceof Error ? error.message : "Unknown error occurred"}`
+        );
+      }
+    },
+  };
 }

@@ -17,7 +17,7 @@ export const projectRemove = createTool({
   },
   handler: async (input) => {
     const response = await apiClient.post("/project.remove", input);
-    
+
     return ResponseFormatter.success(
       `Project "${input.projectId}" removed successfully`,
       response.data

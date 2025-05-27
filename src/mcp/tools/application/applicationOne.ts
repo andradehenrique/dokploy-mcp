@@ -7,7 +7,9 @@ export const applicationOne = createTool({
   name: "application-one",
   description: "Gets a specific application by its ID in Dokploy.",
   schema: z.object({
-    applicationId: z.string().describe("The ID of the application to retrieve."),
+    applicationId: z
+      .string()
+      .describe("The ID of the application to retrieve."),
   }),
   annotations: {
     title: "Get Application Details",
@@ -16,7 +18,9 @@ export const applicationOne = createTool({
     openWorldHint: true,
   },
   handler: async (input) => {
-    const application = await apiClient.get(`/application.one?applicationId=${input.applicationId}`);
+    const application = await apiClient.get(
+      `/application.one?applicationId=${input.applicationId}`
+    );
 
     if (!application?.data) {
       return ResponseFormatter.error(

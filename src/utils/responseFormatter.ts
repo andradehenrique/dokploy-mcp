@@ -1,31 +1,31 @@
 export interface FormattedResponse {
-    content: { type: "text"; text: string }[];
-    isError?: boolean;
+  content: { type: "text"; text: string }[];
+  isError?: boolean;
 }
 
 export class ResponseFormatter {
-    static success(message: string, data?: unknown): FormattedResponse {
-        let text = `✅ ${message}`;
+  static success(message: string, data?: unknown): FormattedResponse {
+    let text = `✅ ${message}`;
 
-        if (data) {
-            text += `\n\n📊 **Data:**\n\`\`\`json\n${JSON.stringify(data, null, 2)}\n\`\`\``;
-        }
-
-        return {
-            content: [{ type: "text", text }]
-        };
+    if (data) {
+      text += `\n\n📊 **Data:**\n\`\`\`json\n${JSON.stringify(data, null, 2)}\n\`\`\``;
     }
 
-    static error(message: string, details?: string): FormattedResponse {
-        let text = `❌ **Error:** ${message}`;
+    return {
+      content: [{ type: "text", text }],
+    };
+  }
 
-        if (details) {
-            text += `\n\n🔍 **Details:** ${details}`;
-        }
+  static error(message: string, details?: string): FormattedResponse {
+    let text = `❌ **Error:** ${message}`;
 
-        return {
-            isError: true,
-            content: [{ type: "text", text }]
-        };
+    if (details) {
+      text += `\n\n🔍 **Details:** ${details}`;
     }
+
+    return {
+      isError: true,
+      content: [{ type: "text", text }],
+    };
+  }
 }

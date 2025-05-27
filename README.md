@@ -190,11 +190,11 @@ If you prefer to run the MCP server in a Docker container:
     docker build -t dokploy-mcp .
     ```
 
-2. **Configure Your MCP Client:**
+2.  **Configure Your MCP Client:**
 
     Update your MCP client's configuration to use the Docker command.
 
-    *Example for VS Code:*
+    _Example for VS Code:_
 
     ```json
     {
@@ -203,9 +203,13 @@ If you prefer to run the MCP server in a Docker container:
           "type": "stdio",
           "command": "docker",
           "args": [
-            "run", "-i", "--rm",
-            "-e", "DOKPLOY_URL=https://your-dokploy-server.com/api",
-            "-e", "DOKPLOY_AUTH_TOKEN=your-dokploy-api-token",
+            "run",
+            "-i",
+            "--rm",
+            "-e",
+            "DOKPLOY_URL=https://your-dokploy-server.com/api",
+            "-e",
+            "DOKPLOY_AUTH_TOKEN=your-dokploy-api-token",
             "dokploy-mcp"
           ]
         }
@@ -213,7 +217,7 @@ If you prefer to run the MCP server in a Docker container:
     }
     ```
 
-    *Example for Cursor:*
+    _Example for Cursor:_
 
     ```json
     {
@@ -221,9 +225,13 @@ If you prefer to run the MCP server in a Docker container:
         "dokploy-mcp": {
           "command": "docker",
           "args": [
-            "run", "-i", "--rm",
-            "-e", "DOKPLOY_URL=https://your-dokploy-server.com/api",
-            "-e", "DOKPLOY_AUTH_TOKEN=your-dokploy-api-token",
+            "run",
+            "-i",
+            "--rm",
+            "-e",
+            "DOKPLOY_URL=https://your-dokploy-server.com/api",
+            "-e",
+            "DOKPLOY_AUTH_TOKEN=your-dokploy-api-token",
             "dokploy-mcp"
           ]
         }
@@ -231,7 +239,7 @@ If you prefer to run the MCP server in a Docker container:
     }
     ```
 
-    *Example for Claude Desktop:*
+    _Example for Claude Desktop:_
 
     ```json
     {
@@ -239,9 +247,13 @@ If you prefer to run the MCP server in a Docker container:
         "dokploy-mcp": {
           "command": "docker",
           "args": [
-            "run", "-i", "--rm",
-            "-e", "DOKPLOY_URL=https://your-dokploy-server.com/api",
-            "-e", "DOKPLOY_AUTH_TOKEN=your-dokploy-api-token",
+            "run",
+            "-i",
+            "--rm",
+            "-e",
+            "DOKPLOY_URL=https://your-dokploy-server.com/api",
+            "-e",
+            "DOKPLOY_AUTH_TOKEN=your-dokploy-api-token",
             "dokploy-mcp"
           ]
         }
@@ -258,12 +270,7 @@ The configuration on Windows is slightly different compared to Linux or macOS. U
   "mcpServers": {
     "dokploy-mcp": {
       "command": "cmd",
-      "args": [
-        "/c",
-        "npx",
-        "-y",
-        "@ahdev/dokploy-mcp"
-      ],
+      "args": ["/c", "npx", "-y", "@ahdev/dokploy-mcp"],
       "env": {
         "DOKPLOY_URL": "https://your-dokploy-server.com/api",
         "DOKPLOY_AUTH_TOKEN": "your-dokploy-api-token"
@@ -282,58 +289,65 @@ The configuration on Windows is slightly different compared to Linux or macOS. U
 
 This MCP server currently provides the following tools for comprehensive project and application management:
 
-*   **`project-all`**:
-    *   Description: Lists all projects in Dokploy.
-    *   Input Schema: None.
+- **`project-all`**:
 
-*   **`project-one`**:
-    *   Description: Gets a specific project by its ID in Dokploy.
-    *   Input Schema: `{ "projectId": "string" }` (The ID of the project to retrieve).
+  - Description: Lists all projects in Dokploy.
+  - Input Schema: None.
 
-*   **`project-create`**:
-    *   Description: Creates a new project in Dokploy.
-    *   Input Schema: `{ "name": "string", "description": "string|null", "env": "string" }` (name is required, description and env are optional).
+- **`project-one`**:
 
-*   **`project-update`**:
-    *   Description: Updates an existing project in Dokploy.
-    *   Input Schema: `{ "projectId": "string", "name": "string", "description": "string|null", "createdAt": "string", "organizationId": "string", "env": "string" }` (projectId is required, all other fields are optional).
+  - Description: Gets a specific project by its ID in Dokploy.
+  - Input Schema: `{ "projectId": "string" }` (The ID of the project to retrieve).
 
-*   **`project-duplicate`**:
-    *   Description: Duplicates an existing project in Dokploy with optional service selection.
-    *   Input Schema: `{ "sourceProjectId": "string", "name": "string", "description": "string", "includeServices": "boolean", "selectedServices": "array" }` (sourceProjectId and name are required, supports selective service duplication).
+- **`project-create`**:
 
-*   **`project-remove`**:
-    *   Description: Removes/deletes an existing project in Dokploy.
-    *   Input Schema: `{ "projectId": "string" }` (The ID of the project to remove).
+  - Description: Creates a new project in Dokploy.
+  - Input Schema: `{ "name": "string", "description": "string|null", "env": "string" }` (name is required, description and env are optional).
 
-*   **`application-one`**:
-    *   Description: Gets a specific application by its ID in Dokploy.
-    *   Input Schema: `{ "applicationId": "string" }` (The ID of the application to retrieve).
+- **`project-update`**:
 
-*   **`application-create`**:
-    *   Description: Creates a new application in Dokploy.
-    *   Input Schema: `{ "name": "string", "appName": "string", "description": "string|null", "projectId": "string", "serverId": "string|null" }` (name and projectId are required, appName, description and serverId are optional).
+  - Description: Updates an existing project in Dokploy.
+  - Input Schema: `{ "projectId": "string", "name": "string", "description": "string|null", "createdAt": "string", "organizationId": "string", "env": "string" }` (projectId is required, all other fields are optional).
+
+- **`project-duplicate`**:
+
+  - Description: Duplicates an existing project in Dokploy with optional service selection.
+  - Input Schema: `{ "sourceProjectId": "string", "name": "string", "description": "string", "includeServices": "boolean", "selectedServices": "array" }` (sourceProjectId and name are required, supports selective service duplication).
+
+- **`project-remove`**:
+
+  - Description: Removes/deletes an existing project in Dokploy.
+  - Input Schema: `{ "projectId": "string" }` (The ID of the project to remove).
+
+- **`application-one`**:
+
+  - Description: Gets a specific application by its ID in Dokploy.
+  - Input Schema: `{ "applicationId": "string" }` (The ID of the application to retrieve).
+
+- **`application-create`**:
+  - Description: Creates a new application in Dokploy.
+  - Input Schema: `{ "name": "string", "appName": "string", "description": "string|null", "projectId": "string", "serverId": "string|null" }` (name and projectId are required, appName, description and serverId are optional).
 
 ### Tool Annotations
 
 All tools include semantic annotations to help MCP clients understand their behavior:
 
-*   **Read-Only Tools** (`readOnlyHint: true`): `project-all`, `project-one`, `application-one`
-*   **Destructive Tools** (`destructiveHint: true`): `project-update`, `project-remove`  
-*   **Creation Tools** (`destructiveHint: false`): `project-create`, `project-duplicate`, `application-create`
-*   **Idempotent Tools** (`idempotentHint: true`): All read-only operations
-*   **External API Tools** (`openWorldHint: true`): All tools (interact with Dokploy API)
+- **Read-Only Tools** (`readOnlyHint: true`): `project-all`, `project-one`, `application-one`
+- **Destructive Tools** (`destructiveHint: true`): `project-update`, `project-remove`
+- **Creation Tools** (`destructiveHint: false`): `project-create`, `project-duplicate`, `application-create`
+- **Idempotent Tools** (`idempotentHint: true`): All read-only operations
+- **External API Tools** (`openWorldHint: true`): All tools (interact with Dokploy API)
 
 ## 🏗️ Architecture
 
 The Dokploy MCP Server is built using:
 
-*   **`@modelcontextprotocol/sdk`**: For creating the MCP server and defining tools.
-*   **Node.js & TypeScript**: As the underlying runtime and language.
-*   **Stdio Transport**: By default, it communicates with MCP clients over standard input/output (stdio), as configured in `src/index.ts`.
-*   **Dokploy API Interaction**: It interacts with your Dokploy server's API to perform actions based on tool invocations.
-*   **HTTP Client Abstraction**: Uses a centralized HTTP client for consistent API communication and error handling.
-*   **Tool Annotations**: All tools include semantic annotations (readOnlyHint, destructiveHint, etc.) to help MCP clients understand tool behavior.
+- **`@modelcontextprotocol/sdk`**: For creating the MCP server and defining tools.
+- **Node.js & TypeScript**: As the underlying runtime and language.
+- **Stdio Transport**: By default, it communicates with MCP clients over standard input/output (stdio), as configured in `src/index.ts`.
+- **Dokploy API Interaction**: It interacts with your Dokploy server's API to perform actions based on tool invocations.
+- **HTTP Client Abstraction**: Uses a centralized HTTP client for consistent API communication and error handling.
+- **Tool Annotations**: All tools include semantic annotations (readOnlyHint, destructiveHint, etc.) to help MCP clients understand tool behavior.
 
 The server listens for MCP requests, executes the corresponding tool (e.g., fetching project data from Dokploy), and returns the results in MCP format. Each tool includes comprehensive input validation and structured error handling.
 
@@ -460,6 +474,31 @@ Use the `--experimental-fetch` flag with `npx` to bypass TLS-related issues:
 ## 🤝 Contributing
 
 We welcome contributions! If you'd like to contribute to the Dokploy MCP Server, please check out our [Contributing Guide](CONTRIBUTING.md).
+
+## 🛠️ Development
+
+This project includes comprehensive development tooling with ESLint, Prettier, and TypeScript.
+
+### Available Scripts
+
+- `npm run build` - Build the project
+- `npm run dev` - Start development mode (watch)
+- `npm run lint` - Run ESLint
+- `npm run lint:fix` - Run ESLint with auto-fix
+- `npm run format` - Format code with Prettier
+- `npm run format:check` - Check code formatting
+- `npm run type-check` - Run TypeScript type checking
+- `npm run precommit` - Run all quality checks (lint + format + type-check)
+- `npm run clean` - Clean build directory
+
+### Code Quality
+
+The project enforces code quality through:
+
+- **ESLint**: Linting with TypeScript support
+- **Prettier**: Code formatting with consistent style
+- **TypeScript**: Static type checking
+- **Pre-commit checks**: Automated quality validation
 
 ## 🆘 Support
 

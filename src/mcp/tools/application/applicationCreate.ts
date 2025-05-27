@@ -8,10 +8,24 @@ export const applicationCreate = createTool({
   description: "Creates a new application in Dokploy.",
   schema: z.object({
     name: z.string().min(1).describe("The name of the application."),
-    appName: z.string().optional().describe("The app name for the application."),
-    description: z.string().nullable().optional().describe("An optional description for the application."),
-    projectId: z.string().min(1).describe("The ID of the project where the application will be created."),
-    serverId: z.string().nullable().optional().describe("The ID of the server where the application will be deployed."),
+    appName: z
+      .string()
+      .optional()
+      .describe("The app name for the application."),
+    description: z
+      .string()
+      .nullable()
+      .optional()
+      .describe("An optional description for the application."),
+    projectId: z
+      .string()
+      .min(1)
+      .describe("The ID of the project where the application will be created."),
+    serverId: z
+      .string()
+      .nullable()
+      .optional()
+      .describe("The ID of the server where the application will be deployed."),
   }),
   annotations: {
     title: "Create Application",
@@ -21,7 +35,7 @@ export const applicationCreate = createTool({
   },
   handler: async (input) => {
     const response = await apiClient.post("/application.create", input);
-    
+
     return ResponseFormatter.success(
       `Application "${input.name}" created successfully in project "${input.projectId}"`,
       response.data

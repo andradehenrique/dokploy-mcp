@@ -11,6 +11,14 @@
   ],
   "scripts": {
     "build": "tsc && chmod 755 build/index.js",
+    "dev": "tsc --watch",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "format": "prettier --write src/**/*.{ts,js,json}",
+    "format:check": "prettier --check src/**/*.{ts,js,json}",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf build",
+    "precommit": "npm run lint && npm run format:check && npm run type-check",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -36,7 +44,13 @@
   },
   "devDependencies": {
     "@types/axios": "^0.9.36",
+    "@types/eslint": "^9.6.1",
     "@types/node": "^22.15.21",
+    "@typescript-eslint/eslint-plugin": "^8.32.1",
+    "@typescript-eslint/parser": "^8.32.1",
+    "eslint": "^9.27.0",
+    "eslint-config-prettier": "^10.1.5",
+    "prettier": "^3.5.3",
     "typescript": "^5.8.3"
   }
 }
