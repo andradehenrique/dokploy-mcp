@@ -1,6 +1,6 @@
 {
   "name": "@ahdev/dokploy-mcp",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "MCP Server for Dokploy API",
   "main": "build/index.js",
   "bin": {
@@ -43,7 +43,6 @@
     "zod": "^3.25.28"
   },
   "devDependencies": {
-    "@types/axios": "^0.9.36",
     "@types/eslint": "^9.6.1",
     "@types/node": "^22.15.21",
     "@typescript-eslint/eslint-plugin": "^8.32.1",

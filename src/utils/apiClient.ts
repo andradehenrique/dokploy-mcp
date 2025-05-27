@@ -1,6 +1,17 @@
-import axios from "axios";
+import axios, {
+  AxiosError,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+} from "axios";
 import { getClientConfig } from "./clientConfig.js";
 import { createLogger } from "./logger.js";
+
+// Extend the config interface to include metadata
+interface ExtendedAxiosRequestConfig extends InternalAxiosRequestConfig {
+  metadata?: {
+    startTime: number;
+  };
+}
 
 // Create logger instance for axios client
 const logger = createLogger("AxiosClient");
@@ -24,10 +35,9 @@ const apiClient = axios.create({
 
 // Request interceptor - Add request timing and logging
 apiClient.interceptors.request.use(
-  (config) => {
+  (config: InternalAxiosRequestConfig) => {
     // Add request timestamp for performance monitoring
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (config as any).metadata = { startTime: Date.now() };
+    (config as ExtendedAxiosRequestConfig).metadata = { startTime: Date.now() };
 
     logger.debug("Making API request", {
       method: config.method?.toUpperCase(),
@@ -38,8 +48,7 @@ apiClient.interceptors.request.use(
 
     return config;
   },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (error: any) => {
+  (error: AxiosError) => {
     logger.error("Request interceptor error", { error: error.message });
     return Promise.reject(error);
   }
@@ -47,10 +56,9 @@ apiClient.interceptors.request.use(
 
 // Response interceptor - Handle responses and errors with proper logging
 apiClient.interceptors.response.use(
-  (response) => {
+  (response: AxiosResponse) => {
     // Log response time for performance monitoring
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const metadata = (response.config as any).metadata;
+    const metadata = (response.config as ExtendedAxiosRequestConfig).metadata;
     const startTime = metadata?.startTime;
 
     if (startTime) {
@@ -65,8 +73,7 @@ apiClient.interceptors.response.use(
 
     return response;
   },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (error: any) => {
+  (error: AxiosError) => {
     const { response, request, config } = error;
 
     // Handle different error scenarios with proper logging
@@ -87,8 +94,7 @@ apiClient.interceptors.response.use(
 
 // Helper Functions
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function handleServerError(response: any): void {
+function handleServerError(response: AxiosResponse): void {
   const { status, data, config } = response;
 
   const errorContext = {
@@ -125,8 +131,10 @@ function handleServerError(response: any): void {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function handleNetworkError(_request: any, config: any): void {
+function handleNetworkError(
+  _request: XMLHttpRequest,
+  config: InternalAxiosRequestConfig | undefined
+): void {
   logger.error("Network error - Request failed", {
     method: config?.method?.toUpperCase(),
     url: config?.url || "Unknown URL",
@@ -135,7 +143,7 @@ function handleNetworkError(_request: any, config: any): void {
   });
 }
 
-function handleUnknownError(error: Error): void {
+function handleUnknownError(error: AxiosError): void {
   logger.error("Unknown error occurred", {
     error: error.message,
     stack: error.stack,
