@@ -4,9 +4,10 @@ This document provides detailed information about all available tools in the Dok
 
 ## 📊 Overview
 
-- **Total Tools**: 31
+- **Total Tools**: 43
 - **Project Tools**: 6
-- **Application Tools**: 25
+- **Application Tools**: 24
+- **PostgreSQL Tools**: 13
 
 All tools include semantic annotations to help MCP clients understand their behavior and are designed to interact with the Dokploy API.
 
@@ -455,6 +456,181 @@ All tools include semantic annotations to help MCP clients understand their beha
 - **Annotations**: Destructive
 - **Required Fields**: `applicationId`
 
+## 🐘 PostgreSQL Database Management Tools
+
+### Core Database Operations
+
+#### `postgres-create`
+
+- **Description**: Creates a new PostgreSQL database in Dokploy
+- **Input Schema**:
+  ```json
+  {
+    "name": "string",
+    "appName": "string",
+    "databaseName": "string",
+    "databaseUser": "string",
+    "databasePassword": "string",
+    "dockerImage": "string",
+    "projectId": "string",
+    "description": "string|null",
+    "serverId": "string|null"
+  }
+  ```
+- **Annotations**: Creation tool (non-destructive)
+- **Required Fields**: `name`, `appName`, `databaseName`, `databaseUser`, `databasePassword`, `projectId`
+- **Optional Fields**: `dockerImage`, `description`, `serverId`
+
+#### `postgres-one`
+
+- **Description**: Gets a specific PostgreSQL database by its ID in Dokploy
+- **Input Schema**:
+  ```json
+  {
+    "postgresId": "string"
+  }
+  ```
+- **Annotations**: Read-only, Idempotent
+- **Required Fields**: `postgresId`
+
+#### `postgres-update`
+
+- **Description**: Updates an existing PostgreSQL database in Dokploy
+- **Input Schema**: Complex schema with database configuration fields including name, credentials, resource limits, and Docker settings
+- **Annotations**: Destructive
+- **Required Fields**: `postgresId`
+- **Optional Fields**: All database configuration fields (name, credentials, memory/CPU limits, etc.)
+
+#### `postgres-remove`
+
+- **Description**: Removes/deletes a PostgreSQL database from Dokploy
+- **Input Schema**:
+  ```json
+  {
+    "postgresId": "string"
+  }
+  ```
+- **Annotations**: Destructive
+- **Required Fields**: `postgresId`
+
+#### `postgres-move`
+
+- **Description**: Moves a PostgreSQL database to a different project
+- **Input Schema**:
+  ```json
+  {
+    "postgresId": "string",
+    "targetProjectId": "string"
+  }
+  ```
+- **Annotations**: Destructive
+- **Required Fields**: `postgresId`, `targetProjectId`
+
+### Lifecycle Management
+
+#### `postgres-deploy`
+
+- **Description**: Deploys a PostgreSQL database in Dokploy
+- **Input Schema**:
+  ```json
+  {
+    "postgresId": "string"
+  }
+  ```
+- **Annotations**: Destructive
+- **Required Fields**: `postgresId`
+
+#### `postgres-start`
+
+- **Description**: Starts a PostgreSQL database in Dokploy
+- **Input Schema**:
+  ```json
+  {
+    "postgresId": "string"
+  }
+  ```
+- **Annotations**: Destructive
+- **Required Fields**: `postgresId`
+
+#### `postgres-stop`
+
+- **Description**: Stops a PostgreSQL database in Dokploy
+- **Input Schema**:
+  ```json
+  {
+    "postgresId": "string"
+  }
+  ```
+- **Annotations**: Destructive
+- **Required Fields**: `postgresId`
+
+#### `postgres-reload`
+
+- **Description**: Reloads a PostgreSQL database in Dokploy
+- **Input Schema**:
+  ```json
+  {
+    "postgresId": "string",
+    "appName": "string"
+  }
+  ```
+- **Annotations**: Destructive
+- **Required Fields**: `postgresId`, `appName`
+
+#### `postgres-rebuild`
+
+- **Description**: Rebuilds a PostgreSQL database in Dokploy
+- **Input Schema**:
+  ```json
+  {
+    "postgresId": "string"
+  }
+  ```
+- **Annotations**: Destructive
+- **Required Fields**: `postgresId`
+
+### Configuration Management
+
+#### `postgres-changeStatus`
+
+- **Description**: Changes the status of a PostgreSQL database
+- **Input Schema**:
+  ```json
+  {
+    "postgresId": "string",
+    "applicationStatus": "idle|running|done|error"
+  }
+  ```
+- **Annotations**: Destructive
+- **Required Fields**: `postgresId`, `applicationStatus`
+
+#### `postgres-saveExternalPort`
+
+- **Description**: Saves external port configuration for a PostgreSQL database
+- **Input Schema**:
+  ```json
+  {
+    "postgresId": "string",
+    "externalPort": "number|null"
+  }
+  ```
+- **Annotations**: Destructive
+- **Required Fields**: `postgresId`, `externalPort`
+
+#### `postgres-saveEnvironment`
+
+- **Description**: Saves environment variables for a PostgreSQL database
+- **Input Schema**:
+  ```json
+  {
+    "postgresId": "string",
+    "env": "string|null"
+  }
+  ```
+- **Annotations**: Destructive
+- **Required Fields**: `postgresId`
+- **Optional Fields**: `env`
+
 ## 🏷️ Tool Annotations
 
 All tools include semantic annotations to help MCP clients understand their behavior:
@@ -465,17 +641,20 @@ All tools include semantic annotations to help MCP clients understand their beha
 
   - `project-all`, `project-one`, `application-one`
   - `application-readAppMonitoring`, `application-readTraefikConfig`
+  - `postgres-one`
 
 - **Destructive Tools** (`destructiveHint: true`):
 
   - `project-update`, `project-remove`
   - All application configuration, deployment, and lifecycle operations
   - All provider configuration tools
+  - All PostgreSQL lifecycle, configuration, and management operations
 
 - **Creation Tools** (`destructiveHint: false`):
 
   - `project-create`, `project-duplicate`, `application-create`
   - `application-refreshToken`
+  - `postgres-create`
 
 - **Idempotent Tools** (`idempotentHint: true`):
 
@@ -533,6 +712,41 @@ All tools include semantic annotations to help MCP clients understand their beha
   "tool": "application-deploy",
   "input": {
     "applicationId": "app-id"
+  }
+}
+```
+
+### Creating and Managing PostgreSQL Database
+
+```json
+// 1. Create a PostgreSQL database
+{
+  "tool": "postgres-create",
+  "input": {
+    "name": "user-database",
+    "appName": "user-db",
+    "databaseName": "users",
+    "databaseUser": "dbuser",
+    "databasePassword": "secure-password",
+    "projectId": "project-id",
+    "description": "User management database"
+  }
+}
+
+// 2. Deploy the database
+{
+  "tool": "postgres-deploy",
+  "input": {
+    "postgresId": "postgres-id-from-step-1"
+  }
+}
+
+// 3. Configure external port
+{
+  "tool": "postgres-saveExternalPort",
+  "input": {
+    "postgresId": "postgres-id",
+    "externalPort": 5432
   }
 }
 ```

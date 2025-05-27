@@ -287,7 +287,7 @@ The configuration on Windows is slightly different compared to Linux or macOS. U
 
 ## 📚 Available Tools
 
-This MCP server provides comprehensive tools for Dokploy project and application management through **31 tools** organized into two main categories:
+This MCP server provides comprehensive tools for Dokploy project, application, and database management through **43 tools** organized into three main categories:
 
 ### 🗂️ Project Management (6 tools)
 
@@ -300,7 +300,7 @@ Complete project lifecycle management including creation, updates, duplication, 
 - **`project-duplicate`** - Duplicate projects with selective service copying
 - **`project-remove`** - Delete projects
 
-### 🚀 Application Management (25 tools)
+### 🚀 Application Management (24 tools)
 
 Comprehensive application lifecycle and configuration management:
 
@@ -327,6 +327,33 @@ Support for multiple Git providers with specific configurations:
 - **Environment Management** - Environment variables and build arguments
 - **Monitoring Integration** - Application monitoring and metrics
 - **Traefik Configuration** - Load balancer and reverse proxy settings
+
+### 🐘 PostgreSQL Database Management (13 tools)
+
+Complete PostgreSQL database lifecycle management:
+
+#### Core Database Operations
+
+- **CRUD Operations**: Create, read, update, remove PostgreSQL databases
+- **Lifecycle Management**: Deploy, start, stop, reload, rebuild databases
+- **Configuration Management**: External ports, environment variables, status changes
+- **Project Management**: Move databases between projects
+
+#### Available PostgreSQL Tools
+
+- **`postgres-create`** - Create new PostgreSQL databases
+- **`postgres-one`** - Get database details
+- **`postgres-update`** - Update database configurations
+- **`postgres-remove`** - Delete databases
+- **`postgres-deploy`** - Deploy databases
+- **`postgres-start`** - Start database instances
+- **`postgres-stop`** - Stop database instances
+- **`postgres-reload`** - Reload database configurations
+- **`postgres-rebuild`** - Rebuild database instances
+- **`postgres-move`** - Move databases between projects
+- **`postgres-changeStatus`** - Change database status
+- **`postgres-saveExternalPort`** - Configure external database ports
+- **`postgres-saveEnvironment`** - Manage database environment variables
 
 For detailed information about each tool, including input schemas, required fields, and usage examples, see **[TOOLS.md](TOOLS.md)**.
 
@@ -355,7 +382,7 @@ The Dokploy MCP Server is built using:
 
 The server architecture supports:
 
-- **31 Tools** covering all project and application management operations
+- **43 Tools** covering all project, application, and database management operations
 - **Multiple Git Providers** (GitHub, GitLab, Bitbucket, Gitea, custom Git)
 - **Flexible Configuration** for builds, deployments, and monitoring
 - **Type-Safe Operations** with comprehensive TypeScript support
