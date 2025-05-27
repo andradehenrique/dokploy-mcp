@@ -392,113 +392,17 @@ npx -y @modelcontextprotocol/inspector npx @ahdev/dokploy-mcp
 
 ## 🔧 Troubleshooting
 
-### ERR_MODULE_NOT_FOUND
-
-If you see this error, try using `bunx` instead of `npx`.
-
-```json
-{
-  "mcpServers": {
-    "dokploy-mcp": {
-      "command": "bunx",
-      "args": ["-y", "@ahdev/dokploy-mcp"],
-      "env": {
-        "DOKPLOY_URL": "https://your-dokploy-server.com/api",
-        "DOKPLOY_AUTH_TOKEN": "your-dokploy-api-token"
-      }
-    }
-  }
-}
-```
-
-This often resolves module resolution issues, especially in environments where `npx` does not properly install or resolve packages.
-
-### ESM Resolution Issues
-
-If you encounter an error like: `Error: Cannot find module 'uriTemplate.js'` try running with the `--experimental-vm-modules` flag:
-
-```json
-{
-  "mcpServers": {
-    "dokploy-mcp": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "--node-options=--experimental-vm-modules",
-        "@ahdev/dokploy-mcp"
-      ],
-      "env": {
-        "DOKPLOY_URL": "https://your-dokploy-server.com/api",
-        "DOKPLOY_AUTH_TOKEN": "your-dokploy-api-token"
-      }
-    }
-  }
-}
-```
-
-### TLS/Certificate Issues
-
-Use the `--experimental-fetch` flag with `npx` to bypass TLS-related issues:
-
-```json
-{
-  "mcpServers": {
-    "dokploy-mcp": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "--node-options=--experimental-fetch",
-        "@ahdev/dokploy-mcp"
-      ],
-      "env": {
-        "DOKPLOY_URL": "https://your-dokploy-server.com/api",
-        "DOKPLOY_AUTH_TOKEN": "your-dokploy-api-token"
-      }
-    }
-  }
-}
-```
-
 ### MCP Client Errors
 
 1. Try adding `@latest` to the package name.
 
-2. Try using `bunx` as an alternative.
+2. Make sure you are using Node v18 or higher to have native fetch support with `npx`.
 
-3. Try using `deno` as an alternative.
-
-4. Make sure you are using Node v18 or higher to have native fetch support with `npx`.
-
-5. Verify your `DOKPLOY_URL` and `DOKPLOY_AUTH_TOKEN` environment variables are correctly set.
+3. Verify your `DOKPLOY_URL` and `DOKPLOY_AUTH_TOKEN` environment variables are correctly set.
 
 ## 🤝 Contributing
 
 We welcome contributions! If you'd like to contribute to the Dokploy MCP Server, please check out our [Contributing Guide](CONTRIBUTING.md).
-
-## 🛠️ Development
-
-This project includes comprehensive development tooling with ESLint, Prettier, and TypeScript.
-
-### Available Scripts
-
-- `npm run build` - Build the project
-- `npm run dev` - Start development mode (watch)
-- `npm run lint` - Run ESLint
-- `npm run lint:fix` - Run ESLint with auto-fix
-- `npm run format` - Format code with Prettier
-- `npm run format:check` - Check code formatting
-- `npm run type-check` - Run TypeScript type checking
-- `npm run precommit` - Run all quality checks (lint + format + type-check)
-- `npm run clean` - Clean build directory
-
-### Code Quality
-
-The project enforces code quality through:
-
-- **ESLint**: Linting with TypeScript support
-- **Prettier**: Code formatting with consistent style
-- **TypeScript**: Static type checking
-- **Pre-commit checks**: Automated quality validation
 
 ## 🆘 Support
 
