@@ -1,6 +1,6 @@
 {
   "name": "@ahdev/dokploy-mcp",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "MCP Server for Dokploy API",
   "main": "build/index.js",
   "bin": {
@@ -10,7 +10,7 @@
     "build"
   ],
   "scripts": {
-    "build": "tsc && chmod 755 build/index.js",
+    "build": "npm run clean && tsc && chmod 755 build/index.js",
     "dev": "tsc --watch",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
