@@ -24,7 +24,16 @@ COPY package.json ./
 # Install only production dependencies
 RUN npm install --production --ignore-scripts
 
-# Expose no ports (stdio only)
+# Expose port for HTTP mode (optional, defaults to 3000)
+EXPOSE 3000
 
-# Default command
+# Add health check for HTTP mode
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD if [ "$MCP_TRANSPORT" = "http" ] || [ "$MCP_TRANSPORT" = "sse" ]; then \
+        wget --no-verbose --tries=1 --spider http://localhost:${PORT:-3000}/health || exit 1; \
+      else \
+        exit 0; \
+      fi
+
+# Default command supports both stdio and HTTP modes
 CMD ["node", "build/index.js"]

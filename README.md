@@ -178,11 +178,9 @@ Open the "Settings" page of the app, navigate to "Plugins," and enter the follow
 
 ### Using Docker
 
-If you prefer to run the MCP server in a Docker container:
+The Docker container supports both **stdio** and **HTTP** transport modes, making it flexible for different deployment scenarios.
 
 1.  **Build the Docker Image:**
-
-    Clone the repository and build the image:
 
     ```bash
     git clone https://github.com/andradehenrique/dokploy-mcp.git
@@ -190,34 +188,61 @@ If you prefer to run the MCP server in a Docker container:
     docker build -t dokploy-mcp .
     ```
 
-2.  **Configure Your MCP Client:**
+2.  **Quick Start with Helper Script:**
 
-    Update your MCP client's configuration to use the Docker command.
+    Use the provided helper script for easy Docker management:
 
-    _Example for VS Code:_
+    ```bash
+    # Run in HTTP mode (recommended for web apps)
+    ./docker-examples.sh http
 
-    ```json
-    {
-      "servers": {
-        "dokploy-mcp": {
-          "type": "stdio",
-          "command": "docker",
-          "args": [
-            "run",
-            "-i",
-            "--rm",
-            "-e",
-            "DOKPLOY_URL=https://your-dokploy-server.com/api",
-            "-e",
-            "DOKPLOY_AUTH_TOKEN=your-dokploy-api-token",
-            "dokploy-mcp"
-          ]
-        }
-      }
-    }
+    # Run in stdio mode (for MCP clients)
+    ./docker-examples.sh stdio
+
+    # Use docker-compose
+    ./docker-examples.sh compose-up
+
+    # View available commands
+    ./docker-examples.sh help
     ```
 
-    _Example for Cursor:_
+3.  **Manual Docker Commands:**
+
+    **Stdio Mode (for MCP clients):**
+
+    ```bash
+    docker run -it --rm \
+      -e DOKPLOY_URL=https://your-dokploy-server.com/api \
+      -e DOKPLOY_AUTH_TOKEN=your_token_here \
+      dokploy-mcp
+    ```
+
+    **HTTP Mode (for web applications):**
+
+    ```bash
+    docker run -it --rm \
+      -p 3000:3000 \
+      -e MCP_TRANSPORT=http \
+      -e DOKPLOY_URL=https://your-dokploy-server.com/api \
+      -e DOKPLOY_AUTH_TOKEN=your_token_here \
+      dokploy-mcp
+    ```
+
+4.  **Docker Compose:**
+
+    Use the provided `docker-compose.yml` for production deployments:
+
+    ```bash
+    # Start HTTP service
+    docker-compose up -d dokploy-mcp-http
+
+    # View logs
+    docker-compose logs -f dokploy-mcp-http
+    ```
+
+5.  **MCP Client Configuration:**
+
+    **For stdio mode (Claude Desktop, VS Code, etc.):**
 
     ```json
     {
@@ -231,7 +256,7 @@ If you prefer to run the MCP server in a Docker container:
             "-e",
             "DOKPLOY_URL=https://your-dokploy-server.com/api",
             "-e",
-            "DOKPLOY_AUTH_TOKEN=your-dokploy-api-token",
+            "DOKPLOY_AUTH_TOKEN=your_token_here",
             "dokploy-mcp"
           ]
         }
@@ -239,27 +264,9 @@ If you prefer to run the MCP server in a Docker container:
     }
     ```
 
-    _Example for Claude Desktop:_
+    **For HTTP mode (web applications):**
 
-    ```json
-    {
-      "mcpServers": {
-        "dokploy-mcp": {
-          "command": "docker",
-          "args": [
-            "run",
-            "-i",
-            "--rm",
-            "-e",
-            "DOKPLOY_URL=https://your-dokploy-server.com/api",
-            "-e",
-            "DOKPLOY_AUTH_TOKEN=your-dokploy-api-token",
-            "dokploy-mcp"
-          ]
-        }
-      }
-    }
-    ```
+    Start the HTTP server first, then configure your client to connect to `http://localhost:3000/mcp`.
 
 ### Install in Windows
 
@@ -284,6 +291,49 @@ The configuration on Windows is slightly different compared to Linux or macOS. U
 
 - `DOKPLOY_URL`: Your Dokploy server API URL (required)
 - `DOKPLOY_AUTH_TOKEN`: Your Dokploy API authentication token (required)
+
+## 🚀 Transport Modes
+
+This MCP server supports multiple transport modes to suit different use cases:
+
+### Stdio Mode (Default)
+
+The default mode uses stdio for direct process communication, ideal for desktop applications and command-line usage.
+
+```bash
+# Run with stdio (default)
+npx -y @ahdev/dokploy-mcp
+# or
+npm run start:stdio
+```
+
+### HTTP Mode (Streamable HTTP)
+
+Modern HTTP mode exposes the server via HTTP/HTTPS using the Streamable HTTP protocol (MCP 2025-03-26). Perfect for web applications and remote clients.
+
+```bash
+# Run with HTTP mode
+npm run start:http
+# or
+npx -y @ahdev/dokploy-mcp --http
+# or via environment variable
+MCP_TRANSPORT=http npx -y @ahdev/dokploy-mcp
+```
+
+**HTTP Server Endpoints:**
+
+- **POST /mcp** - Client-to-server requests
+- **GET /mcp** - Server-to-client notifications
+- **DELETE /mcp** - Session termination
+- **GET /health** - Health check endpoint
+
+**Configuration:**
+
+- Default port: `3000` (override with `PORT=8080`)
+- Uses modern Streamable HTTP protocol (MCP 2025-03-26)
+- Session management with automatic cleanup
+
+For detailed transport mode documentation and client examples, see [TRANSPORT_MODES.md](./TRANSPORT_MODES.md).
 
 ## 📚 Available Tools
 

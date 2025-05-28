@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  # Modo HTTP - para uso com clientes web ou APIs REST
+  dokploy-mcp-http:
+    build: .
+    container_name: dokploy-mcp-http
+    ports:
+      - "3000:3000"
+    environment:
+      - MCP_TRANSPORT=http
+      - PORT=3000
+      - DOKPLOY_URL=https://your-dokploy-server.com/api
+      - DOKPLOY_AUTH_TOKEN=your_token_here
+    restart: unless-stopped
+    networks:
+      - mcp-network
+
+  # Modo Stdio - para uso com clientes MCP tradicionais
+  # Este serviço não expõe portas, usado via docker exec ou volumes
+  dokploy-mcp-stdio:
+    build: .
+    container_name: dokploy-mcp-stdio
+    environment:
+      - DOKPLOY_URL=https://your-dokploy-server.com/api
+      - DOKPLOY_AUTH_TOKEN=your_token_here
+    restart: "no" # Não reinicia automaticamente para modo stdio
+    stdin_open: true
+    tty: true
+    networks:
+      - mcp-network
+
+networks:
+  mcp-network:
+    driver: bridge
