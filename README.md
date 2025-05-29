@@ -307,9 +307,12 @@ npx -y @ahdev/dokploy-mcp
 npm run start:stdio
 ```
 
-### HTTP Mode (Streamable HTTP)
+### HTTP Mode (Streamable HTTP + Legacy SSE)
 
-Modern HTTP mode exposes the server via HTTP/HTTPS using the Streamable HTTP protocol (MCP 2025-03-26). Perfect for web applications and remote clients.
+Modern HTTP mode exposes the server via HTTP/HTTPS supporting **both modern and legacy protocols** for maximum compatibility:
+
+- **Streamable HTTP (MCP 2025-03-26)** - Modern protocol with session management
+- **Legacy SSE (MCP 2024-11-05)** - Backwards compatibility for older clients
 
 ```bash
 # Run with HTTP mode
@@ -320,18 +323,31 @@ npx -y @ahdev/dokploy-mcp --http
 MCP_TRANSPORT=http npx -y @ahdev/dokploy-mcp
 ```
 
-**HTTP Server Endpoints:**
+**Modern Streamable HTTP Endpoints:**
 
 - **POST /mcp** - Client-to-server requests
 - **GET /mcp** - Server-to-client notifications
 - **DELETE /mcp** - Session termination
 - **GET /health** - Health check endpoint
 
+**Legacy SSE Endpoints (Backwards Compatibility):**
+
+- **GET /sse** - SSE stream initialization
+- **POST /messages** - Client message posting
+
 **Configuration:**
 
 - Default port: `3000` (override with `PORT=8080`)
-- Uses modern Streamable HTTP protocol (MCP 2025-03-26)
-- Session management with automatic cleanup
+- Supports both modern Streamable HTTP (MCP 2025-03-26) and legacy SSE (MCP 2024-11-05)
+- Session management with automatic cleanup for both transport types
+
+**Client Compatibility:**
+
+Modern clients automatically use the Streamable HTTP endpoints, while legacy clients can connect using the SSE endpoints. The server handles both protocols simultaneously, ensuring compatibility with:
+
+- **Modern MCP clients** (Claude Desktop, Cline, etc.) → Use `/mcp` endpoints
+- **Legacy MCP clients** → Use `/sse` and `/messages` endpoints
+- **Custom integrations** → Choose the appropriate protocol for your needs
 
 For detailed transport mode documentation and client examples, see [TRANSPORT_MODES.md](./TRANSPORT_MODES.md).
 
