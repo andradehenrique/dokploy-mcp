@@ -28,7 +28,7 @@ Add this to your Cursor `~/.cursor/mcp.json` file. You may also install in a spe
       "args": ["-y", "@ahdev/dokploy-mcp"],
       "env": {
         "DOKPLOY_URL": "https://your-dokploy-server.com/api",
-        "DOKPLOY_AUTH_TOKEN": "your-dokploy-api-token"
+        "DOKPLOY_API_KEY": "your-dokploy-api-token"
       }
     }
   }
@@ -46,7 +46,7 @@ Add this to your Cursor `~/.cursor/mcp.json` file. You may also install in a spe
       "args": ["-y", "@ahdev/dokploy-mcp"],
       "env": {
         "DOKPLOY_URL": "https://your-dokploy-server.com/api",
-        "DOKPLOY_AUTH_TOKEN": "your-dokploy-api-token"
+        "DOKPLOY_API_KEY": "your-dokploy-api-token"
       }
     }
   }
@@ -66,7 +66,7 @@ Add this to your Cursor `~/.cursor/mcp.json` file. You may also install in a spe
       "args": ["run", "--allow-env", "--allow-net", "npm:@ahdev/dokploy-mcp"],
       "env": {
         "DOKPLOY_URL": "https://your-dokploy-server.com/api",
-        "DOKPLOY_AUTH_TOKEN": "your-dokploy-api-token"
+        "DOKPLOY_API_KEY": "your-dokploy-api-token"
       }
     }
   }
@@ -87,7 +87,7 @@ Add this to your Windsurf MCP config file. See [Windsurf MCP docs](https://docs.
       "args": ["-y", "@ahdev/dokploy-mcp"],
       "env": {
         "DOKPLOY_URL": "https://your-dokploy-server.com/api",
-        "DOKPLOY_AUTH_TOKEN": "your-dokploy-api-token"
+        "DOKPLOY_API_KEY": "your-dokploy-api-token"
       }
     }
   }
@@ -110,7 +110,7 @@ Add this to your VS Code MCP config file. See [VS Code MCP docs](https://code.vi
       "args": ["-y", "@ahdev/dokploy-mcp"],
       "env": {
         "DOKPLOY_URL": "https://your-dokploy-server.com/api",
-        "DOKPLOY_AUTH_TOKEN": "your-dokploy-api-token"
+        "DOKPLOY_API_KEY": "your-dokploy-api-token"
       }
     }
   }
@@ -131,7 +131,7 @@ Add this to your Zed `settings.json`. See [Zed Context Server docs](https://zed.
       },
       "settings": {
         "DOKPLOY_URL": "https://your-dokploy-server.com/api",
-        "DOKPLOY_AUTH_TOKEN": "your-dokploy-api-token"
+        "DOKPLOY_API_KEY": "your-dokploy-api-token"
       }
     }
   }
@@ -150,7 +150,7 @@ Add this to your Claude Desktop `claude_desktop_config.json` file. See [Claude D
       "args": ["-y", "@ahdev/dokploy-mcp"],
       "env": {
         "DOKPLOY_URL": "https://your-dokploy-server.com/api",
-        "DOKPLOY_AUTH_TOKEN": "your-dokploy-api-token"
+        "DOKPLOY_API_KEY": "your-dokploy-api-token"
       }
     }
   }
@@ -169,7 +169,7 @@ Open the "Settings" page of the app, navigate to "Plugins," and enter the follow
       "args": ["-y", "@ahdev/dokploy-mcp"],
       "env": {
         "DOKPLOY_URL": "https://your-dokploy-server.com/api",
-        "DOKPLOY_AUTH_TOKEN": "your-dokploy-api-token"
+        "DOKPLOY_API_KEY": "your-dokploy-api-token"
       }
     }
   }
@@ -188,32 +188,14 @@ The Docker container supports both **stdio** and **HTTP** transport modes, makin
     docker build -t dokploy-mcp .
     ```
 
-2.  **Quick Start with Helper Script:**
-
-    Use the provided helper script for easy Docker management:
-
-    ```bash
-    # Run in HTTP mode (recommended for web apps)
-    ./docker-examples.sh http
-
-    # Run in stdio mode (for MCP clients)
-    ./docker-examples.sh stdio
-
-    # Use docker-compose
-    ./docker-examples.sh compose-up
-
-    # View available commands
-    ./docker-examples.sh help
-    ```
-
-3.  **Manual Docker Commands:**
+2.  **Manual Docker Commands:**
 
     **Stdio Mode (for MCP clients):**
 
     ```bash
     docker run -it --rm \
       -e DOKPLOY_URL=https://your-dokploy-server.com/api \
-      -e DOKPLOY_AUTH_TOKEN=your_token_here \
+      -e DOKPLOY_API_KEY=your_token_here \
       dokploy-mcp
     ```
 
@@ -224,11 +206,11 @@ The Docker container supports both **stdio** and **HTTP** transport modes, makin
       -p 3000:3000 \
       -e MCP_TRANSPORT=http \
       -e DOKPLOY_URL=https://your-dokploy-server.com/api \
-      -e DOKPLOY_AUTH_TOKEN=your_token_here \
+      -e DOKPLOY_API_KEY=your_token_here \
       dokploy-mcp
     ```
 
-4.  **Docker Compose:**
+3.  **Docker Compose:**
 
     Use the provided `docker-compose.yml` for production deployments:
 
@@ -240,7 +222,7 @@ The Docker container supports both **stdio** and **HTTP** transport modes, makin
     docker-compose logs -f dokploy-mcp-http
     ```
 
-5.  **MCP Client Configuration:**
+4.  **MCP Client Configuration:**
 
     **For stdio mode (Claude Desktop, VS Code, etc.):**
 
@@ -256,7 +238,7 @@ The Docker container supports both **stdio** and **HTTP** transport modes, makin
             "-e",
             "DOKPLOY_URL=https://your-dokploy-server.com/api",
             "-e",
-            "DOKPLOY_AUTH_TOKEN=your_token_here",
+            "DOKPLOY_API_KEY=your_token_here",
             "dokploy-mcp"
           ]
         }
@@ -280,7 +262,7 @@ The configuration on Windows is slightly different compared to Linux or macOS. U
       "args": ["/c", "npx", "-y", "@ahdev/dokploy-mcp"],
       "env": {
         "DOKPLOY_URL": "https://your-dokploy-server.com/api",
-        "DOKPLOY_AUTH_TOKEN": "your-dokploy-api-token"
+        "DOKPLOY_API_KEY": "your-dokploy-api-token"
       }
     }
   }
@@ -290,7 +272,7 @@ The configuration on Windows is slightly different compared to Linux or macOS. U
 ### Environment Variables
 
 - `DOKPLOY_URL`: Your Dokploy server API URL (required)
-- `DOKPLOY_AUTH_TOKEN`: Your Dokploy API authentication token (required)
+- `DOKPLOY_API_KEY`: Your Dokploy API authentication token (required)
 
 ## 🚀 Transport Modes
 
@@ -349,7 +331,7 @@ Modern clients automatically use the Streamable HTTP endpoints, while legacy cli
 - **Legacy MCP clients** → Use `/sse` and `/messages` endpoints
 - **Custom integrations** → Choose the appropriate protocol for your needs
 
-For detailed transport mode documentation and client examples, see [TRANSPORT_MODES.md](./TRANSPORT_MODES.md).
+For detailed transport mode documentation and client examples, refer to the configuration examples above.
 
 ## 📚 Available Tools
 
@@ -481,7 +463,7 @@ npm run build
       "args": ["tsx", "/path/to/dokploy-mcp/src/index.ts"],
       "env": {
         "DOKPLOY_URL": "https://your-dokploy-server.com/api",
-        "DOKPLOY_AUTH_TOKEN": "your-dokploy-api-token"
+        "DOKPLOY_API_KEY": "your-dokploy-api-token"
       }
     }
   }
@@ -507,7 +489,7 @@ npx -y @modelcontextprotocol/inspector npx @ahdev/dokploy-mcp
 
 2. Make sure you are using Node v18 or higher to have native fetch support with `npx`.
 
-3. Verify your `DOKPLOY_URL` and `DOKPLOY_AUTH_TOKEN` environment variables are correctly set.
+3. Verify your `DOKPLOY_URL` and `DOKPLOY_API_KEY` environment variables are correctly set.
 
 ## 🤝 Contributing
 

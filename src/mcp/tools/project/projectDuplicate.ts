@@ -1,7 +1,7 @@
 import { z } from "zod";
 import apiClient from "../../../utils/apiClient.js";
-import { createTool } from "../toolFactory.js";
 import { ResponseFormatter } from "../../../utils/responseFormatter.js";
+import { createTool } from "../toolFactory.js";
 
 const serviceSchema = z.object({
   id: z.string().describe("The ID of the service."),
@@ -45,7 +45,7 @@ export const projectDuplicate = createTool({
       .array(serviceSchema)
       .optional()
       .describe(
-        "Array of specific services to include. If not provided, all services will be included when includeServices is true."
+        "Array of specific services to include. When includeServices is true and this is not provided, you MUST first retrieve all services from the source project and include ALL of them in this array. Services are not automatically included - you must explicitly list each service with its ID and type."
       ),
   }),
   annotations: {

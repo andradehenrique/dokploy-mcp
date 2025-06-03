@@ -28,13 +28,13 @@ class ConfigManager {
 
   private loadConfig(): Config {
     const dokployUrl = process.env.DOKPLOY_URL;
-    const authToken = process.env.DOKPLOY_AUTH_TOKEN;
+    const authToken = process.env.DOKPLOY_API_KEY;
 
     if (!dokployUrl) {
       throw new Error("Environment variable DOKPLOY_URL is not defined");
     }
     if (!authToken) {
-      throw new Error("Environment variable DOKPLOY_AUTH_TOKEN is not defined");
+      throw new Error("Environment variable DOKPLOY_API_KEY is not defined");
     }
 
     return {

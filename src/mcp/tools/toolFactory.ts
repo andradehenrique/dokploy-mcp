@@ -1,6 +1,6 @@
 import { z, ZodObject, ZodRawShape } from "zod";
-import { createLogger } from "../../utils/logger.js";
 import apiClient from "../../utils/apiClient.js";
+import { createLogger } from "../../utils/logger.js";
 import { ResponseFormatter } from "../../utils/responseFormatter.js";
 
 // Updated to match MCP SDK response format
@@ -89,7 +89,7 @@ export function createTool<TShape extends import("zod").ZodRawShape>(
           ) {
             return ResponseFormatter.error(
               `Authentication failed for tool: ${definition.name}`,
-              "Please check your DOKPLOY_AUTH_TOKEN configuration"
+              "Please check your DOKPLOY_API_KEY configuration"
             );
           }
 
