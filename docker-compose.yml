@@ -1,3 +1,7 @@
+# ⚠️ WARNING: This project has been DISCONTINUED
+# 📍 New official repository: https://github.com/Dokploy/mcp
+# 🔄 Please migrate to the official repository
+
 version: "3.8"
 
 services:

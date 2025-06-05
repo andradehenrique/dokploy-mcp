@@ -7,6 +7,11 @@ import { createLogger } from "./utils/logger.js";
 const logger = createLogger("MCP-Entry");
 
 async function main() {
+  // DISCONTINUATION WARNING
+  logger.warn("⚠️  WARNING: This project has been DISCONTINUED!");
+  logger.warn("📍 New official repository: https://github.com/Dokploy/mcp");
+  logger.warn("🔄 Please migrate to the official repository for updates.");
+
   // Check if running in HTTP mode
   const args = process.argv.slice(2);
   const httpMode =

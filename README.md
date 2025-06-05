@@ -1,8 +1,24 @@
 # Dokploy MCP Server
 
+> **⚠️ PROJECT DISCONTINUED**
+>
+> This project has been moved to the official Dokploy organization and will no longer be maintained in this repository.
+>
+> **📍 New official repository:** https://github.com/Dokploy/mcp
+>
+> Please migrate to the official repository to receive the latest updates and ongoing support.
+
+---
+
+![Discontinued](https://img.shields.io/badge/Status-DISCONTINUED-red?style=for-the-badge) [![New Repository](https://img.shields.io/badge/New_Repo-Dokploy%2Fmcp-blue?style=for-the-badge)](https://github.com/Dokploy/mcp)
+
 [![npm version](https://img.shields.io/npm/v/@ahdev/dokploy-mcp.svg)](https://www.npmjs.com/package/@ahdev/dokploy-mcp) [<img alt="Install in VS Code (npx)" src="https://img.shields.io/badge/VS_Code-VS_Code?style=flat-square&label=Install%20Dokploy%20MCP&color=0098FF">](https://insiders.vscode.dev/redirect?url=vscode%3Amcp%2Finstall%3F%7B%22name%22%3A%22dokploy-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40ahdev%2Fdokploy-mcp%40latest%22%5D%7D)
 
 Dokploy MCP Server exposes Dokploy functionalities as tools consumable via the Model Context Protocol (MCP). It allows MCP-compatible clients (e.g., AI models, other applications) to interact with your Dokploy server programmatically.
+
+**🚨 This project is no longer maintained. Please migrate to the official repository immediately.**
+
+📖 **[Migration Guide →](./MIGRATION.md)** | 🔗 **[Official Repository →](https://github.com/Dokploy/mcp)**
 
 This server focuses exclusively on **tools** for direct Dokploy API operations, providing a clean and efficient interface for project and application management.
 

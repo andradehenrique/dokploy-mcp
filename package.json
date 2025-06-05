@@ -1,7 +1,8 @@
 {
   "name": "@ahdev/dokploy-mcp",
   "version": "1.3.2",
-  "description": "MCP Server for Dokploy API",
+  "description": "[DISCONTINUED] MCP Server for Dokploy API - Moved to https://github.com/Dokploy/mcp",
+  "deprecated": "This package has been discontinued. Use the official repository: https://github.com/Dokploy/mcp",
   "main": "build/index.js",
   "bin": {
     "dokploy-mcp": "build/index.js"
@@ -10,6 +11,7 @@
     "build"
   ],
   "scripts": {
+    "postinstall": "echo '\n⚠️  WARNING: This package has been DISCONTINUED!\n📍 New official repository: https://github.com/Dokploy/mcp\n🔄 Please migrate to the official repository.\n'",
     "build": "npm run clean && tsc && chmod 755 build/index.js",
     "dev": "tsc --watch",
     "start:stdio": "node build/index.js",
@@ -33,13 +35,14 @@
   "keywords": [
     "modelcontextprotocol",
     "mcp",
-    "dokploy"
+    "dokploy",
+    "discontinued"
   ],
   "author": "Henrique Andrade <developer@henriqueandrade.dev>",
   "bugs": {
-    "url": "https://github.com/andradehenrique/dokploy-mcp/issues"
+    "url": "https://github.com/Dokploy/mcp/issues"
   },
-  "homepage": "https://github.com/andradehenrique/dokploy-mcp#readme",
+  "homepage": "https://github.com/Dokploy/mcp#readme",
   "license": "MIT",
   "type": "module",
   "dependencies": {

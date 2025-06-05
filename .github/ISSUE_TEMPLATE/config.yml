@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: "⚠️ PROJECT DISCONTINUED - Access the official repository"
+    url: https://github.com/Dokploy/mcp
+    about: "This project has been moved to the official Dokploy organization. Please use the new repository for issues and discussions."

@@ -1,0 +1,35 @@
+# Source files (not needed in npm package)
+src/
+tsconfig.json
+eslint.config.js
+.prettierrc.json
+.prettierignore
+
+# Development files
+.env
+.env.example
+docker-compose.yml
+Dockerfile
+.dockerignore
+
+# Git and editor files
+.git/
+.gitignore
+.vscode/
+
+# Test files (if any)
+test/
+tests/
+__tests__/
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+
+# Documentation (keep important ones)
+CONTRIBUTING.md
+TOOLS.md
+
+# Keep these important files for users
+DEPRECATED.md
+CHANGELOG.md

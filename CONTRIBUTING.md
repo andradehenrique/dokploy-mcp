@@ -1,10 +1,18 @@
 # Contributing to Dokploy MCP
 
-First off, thank you for considering contributing to Dokploy MCP! Your help is greatly appreciated.
+> **⚠️ THIS PROJECT HAS BEEN DISCONTINUED**
+>
+> This repository no longer accepts contributions as it has been moved to the official Dokploy organization.
+>
+> **📍 To contribute, visit the new repository:** https://github.com/Dokploy/mcp
+>
+> ---
 
-## How Can I Contribute?
+~~First off, thank you for considering contributing to Dokploy MCP! Your help is greatly appreciated.~~
 
-There are many ways you can contribute to the project:
+## ~~How Can I Contribute?~~
+
+~~There are many ways you can contribute to the project:~~
 
 *   **Reporting Bugs**: If you find a bug, please open an issue and describe it in detail, including steps to reproduce it.
 *   **Suggesting Enhancements**: If you have ideas for new features or improvements to existing ones, feel free to open an issue to discuss them.
